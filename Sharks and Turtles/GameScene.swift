@@ -154,19 +154,44 @@ class GameScene: SKScene {
             let dieRoll = dicelogic.nextInt();
             dice.text = String(dieRoll);
             
-            let destinationTile = player.userData!.objectForKey("tilePosition") as! Int + dieRoll;
-            
+            let sourceTile = player.userData!.objectForKey("tilePosition") as! Int;
+            let destinationTile = sourceTile + dieRoll;
+            let sourceRow = sourceTile/10;
+            let destinationRow = destinationTile/10;
+           
             if destinationTile <= 99 {
+                if (sourceRow != destinationRow) {
+                    let subPosX = tileArray[((sourceRow+1)*10)-1].position.x + tileArray[destinationTile].size.width/20
+                    let subPosY = tileArray[((sourceRow+1)*10)-1].position.y + tileArray[destinationTile].size.height/3
+                    let subAction = SKAction.moveTo(CGPointMake(subPosX,subPosY), duration: 0.5)
+                    
+                    let subPos2X = tileArray[((sourceRow+1)*10)].position.x + tileArray[destinationTile].size.width/20
+                    let subPos2Y = tileArray[((sourceRow+1)*10)].position.y + tileArray[destinationTile].size.height/3
+                    let subAction2 = SKAction.moveTo(CGPointMake(subPos2X, subPos2Y), duration: 0.5)
+                    
+                    player.runAction(SKAction.sequence([subAction, subAction2]));
+                    
+                    let posX = tileArray[destinationTile].position.x + tileArray[destinationTile].size.width/20
+                    let posY = tileArray[destinationTile].position.y + tileArray[destinationTile].size.height/3
+                    let currentLocation = CGPointMake(posX, posY)
+                    let action = SKAction.moveTo(currentLocation, duration: 0.5)
+                    player.runAction(SKAction.sequence([subAction, subAction2, action]))
+                    
+                } else {
+                    
+                    let posX = tileArray[destinationTile].position.x + tileArray[destinationTile].size.width/20
+                    let posY = tileArray[destinationTile].position.y + tileArray[destinationTile].size.height/3
+                    let currentLocation = CGPointMake(posX, posY)
+                    let action = SKAction.moveTo(currentLocation, duration: 0.5)
+                    player.runAction(SKAction.sequence([action]))
+                    
+                }
                 player.userData!["tilePosition"] = destinationTile;
-                let posX = tileArray[destinationTile].position.x + tileArray[destinationTile].size.width/20
-                let posY = tileArray[destinationTile].position.y + tileArray[destinationTile].size.height/3
-                let currentLocation = CGPointMake(posX, posY)
-                let action = SKAction.moveTo(currentLocation, duration: 0.5)
-                player.runAction(SKAction.sequence([action]))
+                    
                 if (destinationTile == 99) {
-                    //Do Stuff
+                        //Do Stuff
                     self.removeAllChildren()
-                    self.view!.presentScene(scene)                    
+                    self.view!.presentScene(scene)
                 }
             }
             
