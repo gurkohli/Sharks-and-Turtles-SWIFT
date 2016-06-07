@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "0FF4BB7C026960C577D6DE04E496D2FBE758E44F",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "0FF4BB7C026960C577D6DE04E496D2FBE758E44F" : 0,
+    "D6897D1C64FD474237418A26B34F166C2B2A89A5" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "223A6390-B86F-4E8C-BD55-2D2F2A40057C",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "0FF4BB7C026960C577D6DE04E496D2FBE758E44F" : "Sharks%20and%20Turtles\/",
+    "D6897D1C64FD474237418A26B34F166C2B2A89A5" : ""
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Sharks and Turtles",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Sharks and Turtles.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/gurkohli\/Sharks-and-Turtles-SWIFT-.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "0FF4BB7C026960C577D6DE04E496D2FBE758E44F"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/alireza-a\/upassbc.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "D6897D1C64FD474237418A26B34F166C2B2A89A5"
+    }
+  ]
+}
