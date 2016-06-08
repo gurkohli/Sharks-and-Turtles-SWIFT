@@ -21,15 +21,7 @@ class Dice: SKSpriteNode {
         self.dice = SKSpriteNode()
         //TODO Remove this
         self.dicePlaceholder = SKLabelNode(fontNamed: "Chalkduster")
-        //let texture = SKTexture(imageNamed: "BG1")
-        super.init(texture: nil, color: UIColor.blackColor(), size: size)
-    }
-    
-    init(texture: SKTexture!) {
-        self.dice = SKSpriteNode()
-        //TODO Remove this
-        self.dicePlaceholder = SKLabelNode()
-        super.init(texture: texture, color: UIColor.clearColor(), size: texture.size())
+        super.init(texture: nil, color: UIColor.clearColor(), size: size)
     }
     
     override init(texture: SKTexture!, color: UIColor, size: CGSize) {

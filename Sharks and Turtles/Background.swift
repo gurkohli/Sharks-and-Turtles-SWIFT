@@ -17,11 +17,6 @@ class Background: SKSpriteNode {
         super.init(texture: nil, color: UIColor.clearColor(), size: size)
     }
     
-    init(texture: SKTexture!) {
-        self.bg = SKSpriteNode()
-        super.init(texture: texture, color: UIColor.clearColor(), size: texture.size())
-    }
-    
     override init(texture: SKTexture!, color: UIColor, size: CGSize) {
         self.bg = SKSpriteNode()
         super.init(texture: texture, color: color, size: size)
@@ -32,7 +27,7 @@ class Background: SKSpriteNode {
     }
     
     func loadBackground() {
-        bg = SKSpriteNode(imageNamed: "BG1")
+        bg = SKSpriteNode()
         var backgroundTexture = [SKTexture]()
         
         bg.name = "Background"

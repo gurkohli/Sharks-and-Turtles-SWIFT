@@ -13,13 +13,7 @@ class Foreground: SKSpriteNode {
 
     init(size: CGSize) {
         self.foreground = SKSpriteNode()
-        //let texture = SKTexture(imageNamed: "BG1")
         super.init(texture: nil, color: UIColor.clearColor(), size: size)
-    }
-    
-    init(texture: SKTexture!) {
-        self.foreground = SKSpriteNode()
-        super.init(texture: texture, color: UIColor.clearColor(), size: texture.size())
     }
     
     override init(texture: SKTexture!, color: UIColor, size: CGSize) {

@@ -23,7 +23,9 @@ class GameScene: SKScene {
         self.player = Player(size: size);
         self.fg = Foreground(size: size)
         self.dice = Dice(size: size)
+        
         super.init(size: size)
+        
         self.addChild(self.bg)
         self.addChild(self.fg)
         self.addChild(self.player)

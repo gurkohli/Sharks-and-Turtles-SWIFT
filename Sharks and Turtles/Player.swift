@@ -15,12 +15,7 @@ class Player: SKSpriteNode {
         self.player = SKSpriteNode()
         super.init(texture: nil, color: UIColor.clearColor(), size: size)
     }
-    
-    init(texture: SKTexture!) {
-        self.player = SKSpriteNode()
-        super.init(texture: texture, color: UIColor.clearColor(), size: texture.size())
-    }
-    
+
     override init(texture: SKTexture!, color: UIColor, size: CGSize) {
         self.player = SKSpriteNode()
         super.init(texture: texture, color: color, size: size)
