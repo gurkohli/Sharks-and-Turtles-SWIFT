@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A99F9D901D08BB150045F9BD /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99F9D8F1D08BB150045F9BD /* Player.swift */; };
+		A99F9D921D08C0C30045F9BD /* Background.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99F9D911D08C0C30045F9BD /* Background.swift */; };
+		A99F9D941D08C95A0045F9BD /* Foreground.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99F9D931D08C95A0045F9BD /* Foreground.swift */; };
+		A99F9D961D08CB160045F9BD /* Dice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99F9D951D08CB160045F9BD /* Dice.swift */; };
 		A9A5713C1A2436CE00025AEF /* Background.atlas in Resources */ = {isa = PBXBuildFile; fileRef = A9A5713B1A2436CE00025AEF /* Background.atlas */; };
 		A9AE808F1A1827C800708A7C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AE808E1A1827C800708A7C /* AppDelegate.swift */; };
 		A9AE80911A1827C800708A7C /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = A9AE80901A1827C800708A7C /* GameScene.sks */; };
@@ -29,6 +33,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A99F9D8F1D08BB150045F9BD /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		A99F9D911D08C0C30045F9BD /* Background.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Background.swift; sourceTree = "<group>"; };
+		A99F9D931D08C95A0045F9BD /* Foreground.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Foreground.swift; sourceTree = "<group>"; };
+		A99F9D951D08CB160045F9BD /* Dice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dice.swift; sourceTree = "<group>"; };
 		A9A5713B1A2436CE00025AEF /* Background.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = Background.atlas; sourceTree = "<group>"; };
 		A9AE80891A1827C800708A7C /* Sharks and Turtles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sharks and Turtles.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9AE808D1A1827C800708A7C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -95,6 +103,10 @@
 				A9AE808E1A1827C800708A7C /* AppDelegate.swift */,
 				A9AE80901A1827C800708A7C /* GameScene.sks */,
 				A9AE80921A1827C800708A7C /* GameScene.swift */,
+				A99F9D951D08CB160045F9BD /* Dice.swift */,
+				A99F9D8F1D08BB150045F9BD /* Player.swift */,
+				A99F9D931D08C95A0045F9BD /* Foreground.swift */,
+				A99F9D911D08C0C30045F9BD /* Background.swift */,
 				A9AE80941A1827C800708A7C /* GameViewController.swift */,
 				A9AE80961A1827C800708A7C /* Main.storyboard */,
 				A9AE80991A1827C800708A7C /* Images.xcassets */,
@@ -233,9 +245,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A99F9D901D08BB150045F9BD /* Player.swift in Sources */,
+				A99F9D961D08CB160045F9BD /* Dice.swift in Sources */,
 				A9AE80931A1827C800708A7C /* GameScene.swift in Sources */,
 				A9AE80951A1827C800708A7C /* GameViewController.swift in Sources */,
 				A9AE808F1A1827C800708A7C /* AppDelegate.swift in Sources */,
+				A99F9D941D08C95A0045F9BD /* Foreground.swift in Sources */,
+				A99F9D921D08C0C30045F9BD /* Background.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -312,7 +328,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -348,7 +364,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
