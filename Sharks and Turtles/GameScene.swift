@@ -11,19 +11,15 @@ import GameplayKit
 
 @available(iOS 9.0, *)
 class GameScene: SKScene {
-    
-    var backgroundTexture = [SKTexture]()
+
     var bg: SKSpriteNode
-    var tempNode: SKSpriteNode
     var tileArray = [SKSpriteNode]()
     var player: SKSpriteNode
-    
     var dice: SKLabelNode
     var dicelogic = GKRandomDistribution.d6()
     
     override init(size: CGSize) {
         self.bg = SKSpriteNode()
-        self.tempNode = SKSpriteNode()
         self.player = SKSpriteNode()
         self.dice = SKLabelNode(fontNamed: "Chalkduster")
         super.init(size: size)
@@ -35,7 +31,10 @@ class GameScene: SKScene {
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
-        loadBackground()
+        //dispatch_async(queue, loadBackground);
+        //let backgroundThread = NSThread(target: self, selector: "loadBackground", object: nil);
+        //backgroundThread.start();
+        //loadBackground()
         loadGrid()
         loadPlayer()
         dice.text = "0"
@@ -47,6 +46,7 @@ class GameScene: SKScene {
     
     func loadBackground() {
         bg = SKSpriteNode(imageNamed: "BG1")
+        var backgroundTexture = [SKTexture]()
         
         bg.name = "Background"
         bg.size = frame.size
@@ -72,6 +72,7 @@ class GameScene: SKScene {
         self.addChild(bg)
     }
     func loadGrid() {
+        var tempNode = SKSpriteNode()
         var nodeIndex = 0
         var columns = 0
         var rows = 0
@@ -84,7 +85,7 @@ class GameScene: SKScene {
                 tileArray[nodeIndex].size.height = frame.height/10 - 1.0
                 tileArray[nodeIndex].size.width = frame.width/10 - 1.0
                 tileArray[nodeIndex].zPosition = 2.0
-                tileArray[nodeIndex].anchorPoint = CGPointMake(0.0,0.0)
+                tileArray[nodeIndex].anchorPoint = CGPointMake(0.5,0.5)
                 tileArray[nodeIndex].position = CGPointMake(x , y)
                 tileArray[nodeIndex].hidden = true
                 
@@ -103,7 +104,7 @@ class GameScene: SKScene {
                 tileArray[nodeIndex].size.height = frame.height/10 - 1.0
                 tileArray[nodeIndex].size.width = frame.width/10 - 1.0
                 tileArray[nodeIndex].zPosition = 2.0
-                tileArray[nodeIndex].anchorPoint = CGPointMake(0.0,0.0)
+                tileArray[nodeIndex].anchorPoint = CGPointMake(0.5,0.5)
                 tileArray[nodeIndex].position = CGPointMake(x , y)
                 tileArray[nodeIndex].hidden = true
                 
@@ -137,80 +138,70 @@ class GameScene: SKScene {
         player.name = "Player"
         player.size.width = frame.height / 20
         player.size.height = frame.width / 20
-        player.anchorPoint = CGPointMake(0,0)
-        player.position.x = tileArray[0].size.width/20
-        player.position.y = tileArray[0].size.height/3
+        player.anchorPoint = CGPointMake(0.5,0.5)
+        player.position.x = frame.width/20 - 0.5
+        player.position.y = frame.height/20 - 0.5
         player.zPosition = 3.0
         player.userData = ["tilePosition": 0]
         
         player.color = UIColor.blackColor()
         self.addChild(player)
     }
+    
+    func movePlayer() {
+        let dieRoll = dicelogic.nextInt();
+        dice.text = String(dieRoll);
+        
+        let sourceTile = player.userData!.objectForKey("tilePosition") as! Int;
+        let destinationTile = sourceTile + dieRoll;
+        let sourceRow = sourceTile/10;
+        let destinationRow = destinationTile/10;
+        
+        if destinationTile <= 99 {
+            player.runAction(SKAction.sequence([
+                // Wait for 0.5 seconds
+                //SKAction.waitForDuration(0.5),
+                SKAction.runBlock({
+                    let ref = CGPathCreateMutable()
+                    
+                    for var i = sourceTile; i <= destinationTile; ++i {
+                        let p = self.tileArray[i]
+                        
+                        if i == sourceTile {
+                            CGPathMoveToPoint(ref, nil, p.position.x + p.size.width/2, p.position.y + p.size.height/2)
+                        } else {
+                            CGPathAddLineToPoint(ref, nil, p.position.x + p.size.width/2, p.position.y + p.size.height/2)
+                        }
+                    }
+                    
+                    let shapeNode = SKShapeNode()
+                    shapeNode.path = ref
+                    shapeNode.name = "line"
+                    shapeNode.strokeColor = UIColor.redColor()
+                    shapeNode.lineWidth = 2
+                    shapeNode.zPosition = 200
+                    
+                    self.addChild(shapeNode)
+                    
+                    let action = SKAction.followPath(ref, asOffset: false, orientToPath: false, speed: 200);
+                    self.player.runAction(action);
+                })
+                ]));
+            player.userData!["tilePosition"] = destinationTile;
+            if (destinationTile == 99) {
+                //Do Stuff
+                //self.removeAllChildren()
+                //self.view!.presentScene(scene)
+            }
+        }
+    }
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         /* Called when a touch begins */
-        
         for touch: AnyObject in touches {
-            
-            let dieRoll = dicelogic.nextInt();
-            dice.text = String(dieRoll);
-            
-            let sourceTile = player.userData!.objectForKey("tilePosition") as! Int;
-            let destinationTile = sourceTile + dieRoll;
-            let sourceRow = sourceTile/10;
-            let destinationRow = destinationTile/10;
-           
-            if destinationTile <= 99 {
-                if (sourceRow != destinationRow) {
-                    let subPosX = tileArray[((sourceRow+1)*10)-1].position.x + tileArray[destinationTile].size.width/20
-                    let subPosY = tileArray[((sourceRow+1)*10)-1].position.y + tileArray[destinationTile].size.height/3
-                    let subAction = SKAction.moveTo(CGPointMake(subPosX,subPosY), duration: 0.5)
-                    
-                    let subPos2X = tileArray[((sourceRow+1)*10)].position.x + tileArray[destinationTile].size.width/20
-                    let subPos2Y = tileArray[((sourceRow+1)*10)].position.y + tileArray[destinationTile].size.height/3
-                    let subAction2 = SKAction.moveTo(CGPointMake(subPos2X, subPos2Y), duration: 0.5)
-                    
-                    player.runAction(SKAction.sequence([subAction, subAction2]));
-                    
-                    let posX = tileArray[destinationTile].position.x + tileArray[destinationTile].size.width/20
-                    let posY = tileArray[destinationTile].position.y + tileArray[destinationTile].size.height/3
-                    let currentLocation = CGPointMake(posX, posY)
-                    let action = SKAction.moveTo(currentLocation, duration: 0.5)
-                    player.runAction(SKAction.sequence([subAction, subAction2, action]))
-                    
-                } else {
-                    
-                    let posX = tileArray[destinationTile].position.x + tileArray[destinationTile].size.width/20
-                    let posY = tileArray[destinationTile].position.y + tileArray[destinationTile].size.height/3
-                    let currentLocation = CGPointMake(posX, posY)
-                    let action = SKAction.moveTo(currentLocation, duration: 0.5)
-                    player.runAction(SKAction.sequence([action]))
-                    
-                }
-                player.userData!["tilePosition"] = destinationTile;
-                    
-                if (destinationTile == 99) {
-                        //Do Stuff
-                    self.removeAllChildren()
-                    self.view!.presentScene(scene)
-                }
-            }
-            
-
-            /*let location = touch.locationInNode(self)
-                var currentLocation = CGPointMake(location.x, location.y)
-                for var tileIndex = Int(1) ; tileIndex < tileArray.count ; tileIndex++ {
-                if ((location.x > tileArray[tileIndex - 1].position.x && location.x < tileArray[tileIndex].position.x) && (location.y > tileArray[tileIndex].position.y)) {
-                    destinationTile = tileIndex
-                    currentLocation.x = tileArray[tileIndex-1].position.x + tileArray[tileIndex-1].size.width/20
-                    currentLocation.y = tileArray[tileIndex-1].position.y + tileArray[tileIndex-1].size.height/3
-
-                } else if ((location.x > tileArray[tileIndex].position.x && location.x < frame.width) && (location.y > tileArray[tileIndex].position.y)) {
-                    currentLocation.x = tileArray[tileIndex].position.x + tileArray[tileIndex].size.width/20
-                    currentLocation.y = tileArray[tileIndex].position.y + tileArray[tileIndex].size.height/3
-
-                }
-            }*/
-            
+            self.movePlayer()
+            //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+             ///   self.movePlayer();
+            //})
         }
     }
    
