@@ -20,6 +20,8 @@
 		A9AE809A1A1827C800708A7C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9AE80991A1827C800708A7C /* Images.xcassets */; };
 		A9AE809D1A1827C800708A7C /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9AE809B1A1827C800708A7C /* LaunchScreen.xib */; };
 		A9AE80A91A1827C800708A7C /* Sharks_and_TurtlesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AE80A81A1827C800708A7C /* Sharks_and_TurtlesTests.swift */; };
+		A9D1EF2C1D08E9C300E476D4 /* Shark.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1EF2B1D08E9C300E476D4 /* Shark.swift */; };
+		A9D1EF2E1D0A34D900E476D4 /* Turtle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D1EF2D1D0A34D900E476D4 /* Turtle.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +52,8 @@
 		A9AE80A21A1827C800708A7C /* Sharks and TurtlesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Sharks and TurtlesTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9AE80A71A1827C800708A7C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A9AE80A81A1827C800708A7C /* Sharks_and_TurtlesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sharks_and_TurtlesTests.swift; sourceTree = "<group>"; };
+		A9D1EF2B1D08E9C300E476D4 /* Shark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shark.swift; sourceTree = "<group>"; };
+		A9D1EF2D1D0A34D900E476D4 /* Turtle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Turtle.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +109,8 @@
 				A9AE80921A1827C800708A7C /* GameScene.swift */,
 				A99F9D951D08CB160045F9BD /* Dice.swift */,
 				A99F9D8F1D08BB150045F9BD /* Player.swift */,
+				A9D1EF2B1D08E9C300E476D4 /* Shark.swift */,
+				A9D1EF2D1D0A34D900E476D4 /* Turtle.swift */,
 				A99F9D931D08C95A0045F9BD /* Foreground.swift */,
 				A99F9D911D08C0C30045F9BD /* Background.swift */,
 				A9AE80941A1827C800708A7C /* GameViewController.swift */,
@@ -250,8 +256,10 @@
 				A9AE80931A1827C800708A7C /* GameScene.swift in Sources */,
 				A9AE80951A1827C800708A7C /* GameViewController.swift in Sources */,
 				A9AE808F1A1827C800708A7C /* AppDelegate.swift in Sources */,
+				A9D1EF2E1D0A34D900E476D4 /* Turtle.swift in Sources */,
 				A99F9D941D08C95A0045F9BD /* Foreground.swift in Sources */,
 				A99F9D921D08C0C30045F9BD /* Background.swift in Sources */,
+				A9D1EF2C1D08E9C300E476D4 /* Shark.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

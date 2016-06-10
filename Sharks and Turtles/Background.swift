@@ -9,16 +9,13 @@
 import SpriteKit
 
 class Background: SKSpriteNode {
-    var bg: SKSpriteNode
     
     init(size: CGSize) {
-        self.bg = SKSpriteNode()
-        //let texture = SKTexture(imageNamed: "BG1")
         super.init(texture: nil, color: UIColor.clearColor(), size: size)
+        loadBackground()
     }
     
     override init(texture: SKTexture!, color: UIColor, size: CGSize) {
-        self.bg = SKSpriteNode()
         super.init(texture: texture, color: color, size: size)
     }
     
@@ -27,13 +24,12 @@ class Background: SKSpriteNode {
     }
     
     func loadBackground() {
-        bg = SKSpriteNode()
         var backgroundTexture = [SKTexture]()
         
-        bg.name = "Background"
-        bg.size = frame.size
-        bg.anchorPoint = CGPointMake(0.0,0.0)
-        bg.zPosition = 1.0
+        name = "Background"
+        size = frame.size
+        anchorPoint = CGPointMake(0.0,0.0)
+        zPosition = 1.0
         
         
         let backgroundAtlas = SKTextureAtlas(named: "Background")
@@ -47,10 +43,9 @@ class Background: SKSpriteNode {
             let temp = backgroundAtlas.textureNamed(textureName)
             backgroundTexture.append(temp)
         }
-        bg.runAction(SKAction.repeatActionForever(SKAction.animateWithTextures(backgroundTexture, timePerFrame: 0.20)))
+        runAction(SKAction.repeatActionForever(SKAction.animateWithTextures(backgroundTexture, timePerFrame: 0.20)))
         
-        bg.color = UIColor.blueColor()
-        bg.colorBlendFactor = 0.3
-        self.addChild(bg)
+        color = UIColor.blueColor()
+        colorBlendFactor = 0.3
     }
 }
