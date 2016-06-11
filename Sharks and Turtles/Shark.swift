@@ -15,26 +15,13 @@ class Shark: SKSpriteNode {
         super.init(texture: nil, color: UIColor.clearColor(), size: texture.size())
     }
     
-    init(size: CGSize, point: CGPoint) {
-        super.init(texture: nil, color: UIColor.clearColor(), size: size)
-        loadShark(point)
-    }
-    
-    override init(texture: SKTexture!, color: UIColor, size: CGSize) {
-        super.init(texture: texture, color: color, size: size)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func loadShark(centerPoint: CGPoint) -> SKSpriteNode {
+    init(nodeSize: CGSize, nodePosition: CGPoint) {
+        super.init(texture: nil, color: UIColor.clearColor(), size: nodeSize)
+        
         name = "Shark"
-        size.width = frame.width / 40
-        size.height = frame.height / 40
+        size = nodeSize
         anchorPoint = CGPointMake(0.5,0.5)
-        position.x = centerPoint.x
-        position.y = centerPoint.y
+        position = nodePosition
         zPosition = 3.0
         
         color = UIColor.redColor()
@@ -43,13 +30,21 @@ class Shark: SKSpriteNode {
         let randomFloatValue = CGFloat(Float(arc4random())%10)/CGFloat(10)
         
         let ref = CGPathCreateMutable()
-        CGPathAddRoundedRect(ref, nil, CGRectMake(centerPoint.x, centerPoint.y, size.width*2, size.height*2), 0.5, 0.5)
+        CGPathAddRoundedRect(ref, nil, CGRectMake(nodePosition.x, nodePosition.y, nodeSize.width*2, nodeSize.height*2), 0.5, 0.5)
         
         CGPathCloseSubpath(ref)
+        let delay = SKAction.waitForDuration(NSTimeInterval(randomFloatValue))
+        let followPath = SKAction.followPath(ref, asOffset: false, orientToPath: true, speed: 20+randomFloatValue*20);
         
-        
-        runAction(SKAction.sequence([SKAction.waitForDuration(NSTimeInterval(randomFloatValue)),SKAction.repeatActionForever(SKAction.followPath(ref, asOffset: false, orientToPath: true, speed: 20+randomFloatValue*20))]))
-        return self
+        runAction(SKAction.sequence([delay,SKAction.repeatActionForever(followPath)]))
+    }
+    
+    override init(texture: SKTexture!, color: UIColor, size: CGSize) {
+        super.init(texture: texture, color: color, size: size)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
 }

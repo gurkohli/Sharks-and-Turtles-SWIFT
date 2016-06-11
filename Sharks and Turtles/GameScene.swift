@@ -14,7 +14,12 @@ class GameScene: SKScene {
 
     var bg: Background
     var fg: Foreground
+    
     var player1: Player
+    var player2: Player
+    var isPlayer2Turn: Bool
+    var isPlayer2Computer: Bool
+    
     var dice: Dice
     var sharks: [Shark]
     var turtles: [Turtle]
@@ -22,7 +27,6 @@ class GameScene: SKScene {
     
     var sharkHandlerNode: SKSpriteNode
     var turtleHandlerNode: SKSpriteNode
-    var backgroundForegroundHandlerNode: SKSpriteNode
     var playerHandlerNode: SKSpriteNode
     
     struct sharkTurtleData {
@@ -34,16 +38,29 @@ class GameScene: SKScene {
     let TURTLE_DATA = sharkTurtleData(count: 7, beginTiles: [3,8,28,58,75,80,90], endTiles: [21,30,84,77,86,100,91])
     
     override init(size: CGSize) {
-        bg = Background(size: size);
-        fg = Foreground(size: size)
-        player1 = Player(framesize: size);
+        let frameSize = size
+        let tileSize = CGSizeMake(frameSize.width/10 - 2, frameSize.height/10 - 2);
+        let playerSize = CGSizeMake(tileSize.width/2, tileSize.height/2)
+        //TODO Add Dice Size when Adding Dice Textures
+        let diceSize = CGSizeMake(0, 0)
+        
+        let player1Position = CGPointMake(playerSize.width, playerSize.height/2)
+        let player2Position = CGPointMake(playerSize.width, playerSize.height*3/2)
+        let dicePosition = CGPointMake(size.width - 25, size.height-40)
+        
+        bg = Background(nodeSize: frameSize);
+        fg = Foreground(nodeSize: frameSize);
+        player1 = Player(nodeSize: playerSize, nodeColor: nil, nodePosition: player1Position);
+        player2 = Player(nodeSize: playerSize, nodeColor: UIColor.whiteColor(), nodePosition: player2Position);
+        isPlayer2Turn = false;
+        isPlayer2Computer = false;
         sharks = [Shark]();
         turtles = [Turtle]();
-        dice = Dice(size: size)
-        tileArray = [Foreground.Tile(size: size, position: CGPointMake(0,0))]
+        dice = Dice(nodeSize: diceSize, nodePosition: dicePosition)
+        tileArray = [Foreground.Tile(size: frameSize, position: CGPointMake(0,0))]
+
         sharkHandlerNode = SKSpriteNode();
         turtleHandlerNode = SKSpriteNode();
-        backgroundForegroundHandlerNode = SKSpriteNode()
         playerHandlerNode = SKSpriteNode()
         
         super.init(size: size)
@@ -58,19 +75,26 @@ class GameScene: SKScene {
         /* Setup your scene here */
 
         tileArray = fg.loadGrid()
-        //backgroundForegroundHandlerNode.addChild(bg)
-        //backgroundForegroundHandlerNode.addChild(fg)
         playerHandlerNode.addChild(player1)
+        playerHandlerNode.addChild(player2)
         
         for var i=0; i < SHARK_DATA.count; i++ {
             let tile = tileArray[SHARK_DATA.beginTiles[i]]
-            sharks.append(Shark(size: size, point: CGPointMake(tile.position.x + tile.size.width/4, tile.position.y + tile.size.height/4)))
+            
+            let sharkSize = CGSizeMake(tile.size.width/4, tile.size.height/4)
+            let sharkPosition = CGPointMake(tile.position.x + sharkSize.width, tile.position.y + sharkSize.height)
+            
+            sharks.append(Shark(nodeSize: sharkSize, nodePosition: sharkPosition))
             sharkHandlerNode.addChild(sharks[i])
         }
         
         for var i=0; i < TURTLE_DATA.count; i++ {
             let tile = tileArray[TURTLE_DATA.beginTiles[i]]
-            turtles.append(Turtle(size: size, point: CGPointMake(tile.position.x + tile.size.width/4, tile.position.y + tile.size.height/4)))
+            
+            let turtleSize = CGSizeMake(tile.size.width/4, tile.size.height/4)
+            let turtlePosition = CGPointMake(tile.position.x + tile.size.width/2, tile.position.y + turtleSize.height)
+            
+            turtles.append(Turtle(nodeSize: turtleSize, nodePosition:turtlePosition))
             turtleHandlerNode.addChild(turtles[i])
         }
         
@@ -110,30 +134,57 @@ class GameScene: SKScene {
         }
         return -1
     }
+    
+    func performPlayerAction(currentPlayer: Player, computer: Player?) -> Bool{
+        let dieRoll = self.dice.rollDice()
+        func checkSharksAndTurtles() {
+            let currentTile = currentPlayer.getCurrentTile()
+            func callback() {
+                var delayTime = Int64(100)
+                if (computer != nil) {
+                    delayTime = Int64(500)
+                }
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, delayTime * Int64(NSEC_PER_MSEC)), dispatch_get_main_queue(), {
+                    self.userInteractionEnabled = true
+                    if (computer != nil) {
+                        self.performPlayerAction(computer!,computer: nil)
+                    }
+                })
+            }
+            if (self.isSharkOnTile(currentTile)) {
+                currentPlayer.movePlayerToTile(self.getSharkDestinationTile(currentTile), tileArray: self.tileArray,runAfterActionCompletion: callback)
+            } else if (self.isTurtleOnTile(currentTile)) {
+                currentPlayer.movePlayerToTile(self.getTurtleDestinationTile(currentTile), tileArray: self.tileArray,runAfterActionCompletion: callback)
+            } else {
+                callback();
+            }
+            //self.userInteractionEnabled = true;
+        }
+        
+        return currentPlayer.movePlayer(dieRoll, tileArray: tileArray, runAfterActionCompletion:checkSharksAndTurtles)
+    }
 
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         /* Called when a touch begins */
         for touch: AnyObject in touches {
             self.userInteractionEnabled = false;
-            let dieRoll = self.dice.rollDice()
-            func checkShark() {
-                let currentTile = self.player1.getCurrentTile()
-                func enableTouch() {
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 100 * Int64(NSEC_PER_MSEC)), dispatch_get_main_queue(), {
-                        self.userInteractionEnabled = true
-                    })
-                }
-                if (self.isSharkOnTile(currentTile)) {
-                    self.player1.movePlayerToTile(self.getSharkDestinationTile(currentTile), tileArray: self.tileArray,runAfterActionCompletion: enableTouch)
-                } else if (self.isTurtleOnTile(currentTile)) {
-                    self.player1.movePlayerToTile(self.getTurtleDestinationTile(currentTile), tileArray: self.tileArray,runAfterActionCompletion: enableTouch)
+            var gameEnd = false;
+            if (isPlayer2Computer) {
+                gameEnd = performPlayerAction(player1, computer: player2)
+            } else {
+                if (!isPlayer2Turn) {
+                    gameEnd = performPlayerAction(player1, computer: nil)
+                    isPlayer2Turn = true
                 } else {
-                    enableTouch();
+                    gameEnd = performPlayerAction(player2, computer: nil)
+                    isPlayer2Turn = false
                 }
-                //self.userInteractionEnabled = true;
             }
-        
-            player1.movePlayer(dieRoll, tileArray: tileArray, runAfterActionCompletion:checkShark)
+            if (gameEnd) {
+                //Do Stuff
+                self.removeAllChildren()
+                //self.view?.presentScene(scene)
+            }
         }
     }
    

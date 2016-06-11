@@ -10,24 +10,13 @@ import SpriteKit
 
 class Background: SKSpriteNode {
     
-    init(size: CGSize) {
-        super.init(texture: nil, color: UIColor.clearColor(), size: size)
-        loadBackground()
-    }
-    
-    override init(texture: SKTexture!, color: UIColor, size: CGSize) {
-        super.init(texture: texture, color: color, size: size)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func loadBackground() {
+    init(nodeSize: CGSize) {
+        super.init(texture: nil, color: UIColor.clearColor(), size: nodeSize)
+        
         var backgroundTexture = [SKTexture]()
         
         name = "Background"
-        size = frame.size
+        size = nodeSize
         anchorPoint = CGPointMake(0.0,0.0)
         zPosition = 1.0
         
@@ -47,5 +36,13 @@ class Background: SKSpriteNode {
         
         color = UIColor.blueColor()
         colorBlendFactor = 0.3
+    }
+    
+    override init(texture: SKTexture!, color: UIColor, size: CGSize) {
+        super.init(texture: texture, color: color, size: size)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

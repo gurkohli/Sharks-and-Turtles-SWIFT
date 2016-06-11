@@ -16,14 +16,14 @@ class Dice: SKSpriteNode {
     //Placeholder for the actual dice. TODO - Remove this
     var dicePlaceholder: SKLabelNode
     
-    init(size: CGSize) {
+    init(nodeSize: CGSize, nodePosition: CGPoint) {
         //TODO Remove this
         self.dicePlaceholder = SKLabelNode(fontNamed: "Chalkduster")
-        super.init(texture: nil, color: UIColor.clearColor(), size: size)
+        super.init(texture: nil, color: UIColor.clearColor(), size: nodeSize)
         
         //TODO Remove all this
         dicePlaceholder.text = "0"
-        dicePlaceholder.position = CGPoint(x: frame.width - 25, y: frame.height-40)
+        dicePlaceholder.position = nodePosition
         dicePlaceholder.color = UIColor.blackColor()
         dicePlaceholder.zPosition = 50
         

@@ -15,9 +15,28 @@ class Turtle: SKSpriteNode {
         super.init(texture: nil, color: UIColor.clearColor(), size: texture.size())
     }
     
-    init(size: CGSize, point: CGPoint) {
-        super.init(texture: nil, color: UIColor.clearColor(), size: size)
-        loadTurtle(point)
+    init(nodeSize: CGSize, nodePosition: CGPoint) {
+        super.init(texture: nil, color: UIColor.clearColor(), size: nodeSize)
+        
+        name = "Turtle"
+        size = nodeSize
+        anchorPoint = CGPointMake(0.5,0.5)
+        position = nodePosition
+        zPosition = 3.0
+        
+        color = UIColor.greenColor()
+        
+        // To create non-uniformity
+        let randomFloatValue = CGFloat(Float(arc4random())%10)/CGFloat(10)
+        
+        let ref = CGPathCreateMutable()
+        CGPathAddRoundedRect(ref, nil, CGRectMake(nodePosition.x, nodePosition.y, 2, nodeSize.height*2), 0.5, 0.5)
+        
+        CGPathCloseSubpath(ref)
+        let delay = SKAction.waitForDuration(NSTimeInterval(randomFloatValue))
+        let followPath = SKAction.followPath(ref, asOffset: false, orientToPath: true, speed: 10+randomFloatValue*5);
+        
+        runAction(SKAction.sequence([delay,SKAction.repeatActionForever(followPath)]))
     }
     
     override init(texture: SKTexture!, color: UIColor, size: CGSize) {
@@ -26,28 +45,5 @@ class Turtle: SKSpriteNode {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    func loadTurtle(centerPoint: CGPoint) -> SKSpriteNode {
-        name = "Turtle"
-        size.width = frame.width / 40
-        size.height = frame.height / 40
-        anchorPoint = CGPointMake(0.5,0.5)
-        position.x = centerPoint.x
-        position.y = centerPoint.y
-        zPosition = 3.0
-
-        color = UIColor.greenColor()
-
-        // To create non-uniformity
-        let randomFloatValue = CGFloat(Float(arc4random())%10)/CGFloat(10)
-
-        let ref = CGPathCreateMutable()
-        CGPathAddRoundedRect(ref, nil, CGRectMake(centerPoint.x + size.width, centerPoint.y, 2, size.height*2), 0.5, 0.5)
-
-        CGPathCloseSubpath(ref)
-
-        runAction(SKAction.sequence([SKAction.waitForDuration(NSTimeInterval(randomFloatValue)),SKAction.repeatActionForever(SKAction.followPath(ref, asOffset: false, orientToPath: true, speed: 10+randomFloatValue*5))]))
-        return self
     }
 }

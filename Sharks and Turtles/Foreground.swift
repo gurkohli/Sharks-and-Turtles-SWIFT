@@ -10,8 +10,8 @@ import SpriteKit
 
 class Foreground: SKSpriteNode {
 
-    init(size: CGSize) {
-        super.init(texture: nil, color: UIColor.clearColor(), size: size)
+    init(nodeSize: CGSize) {
+        super.init(texture: nil, color: UIColor.clearColor(), size: nodeSize)
     }
 
     override init(texture: SKTexture!, color: UIColor, size: CGSize) {

@@ -10,20 +10,20 @@ import SpriteKit
 
 class Player: SKSpriteNode {
     
-    init(framesize: CGSize) {
-        super.init(texture: nil, color: UIColor.clearColor(), size: framesize)
+    init(nodeSize: CGSize, nodeColor: UIColor?, nodePosition: CGPoint) {
+        super.init(texture: nil, color: UIColor.clearColor(), size: nodeSize)
         
         name = "Player"
-        size.width = framesize.width/20
-        size.height = framesize.height/20
+        size = nodeSize
         anchorPoint = CGPointMake(0.5,0.5)
-        position.x = framesize.width/20 - 0.5
-        position.y = framesize.height/20 - 0.5
+        position = nodePosition
         zPosition = 3.0
-        userData = ["tilePosition": 1]
+        userData = ["tilePosition": 1, "offsetFromTileBottom": position.y]
         zRotation = 1.5708 //90 Degrees
-        
         color = UIColor.blackColor()
+        if ((nodeColor) != nil) {
+            color = nodeColor!
+        }
     }
 
     override init(texture: SKTexture!, color: UIColor, size: CGSize) {
@@ -40,6 +40,9 @@ class Player: SKSpriteNode {
     func setCurrentTile(currentTile: Int) {
         userData!["tilePosition"] = currentTile
     }
+    func getOffsetFromTileBottom() -> CGFloat {
+        return userData!.objectForKey("offsetFromTileBottom") as! CGFloat
+    }
     
     func createPathBetweenTiles(sourceTile: Int, destinationTile: Int, tileArray:[Foreground.Tile]) -> CGPath {
         let ref = CGPathCreateMutable()
@@ -48,9 +51,9 @@ class Player: SKSpriteNode {
                 let p = tileArray[i]
                 
                 if i == sourceTile {
-                    CGPathMoveToPoint(ref, nil, p.position.x + p.size.width/2, p.position.y + p.size.height/2)
+                    CGPathMoveToPoint(ref, nil, p.position.x + p.size.width/2, p.position.y + getOffsetFromTileBottom())
                 } else {
-                    CGPathAddLineToPoint(ref, nil, p.position.x + p.size.width/2, p.position.y + p.size.height/2)
+                    CGPathAddLineToPoint(ref, nil, p.position.x + p.size.width/2, p.position.y + getOffsetFromTileBottom())
                 }
             }
         } else if (sourceTile > destinationTile) {
@@ -58,15 +61,15 @@ class Player: SKSpriteNode {
                 let p = tileArray[i]
                 
                 if i == sourceTile {
-                    CGPathMoveToPoint(ref, nil, p.position.x + p.size.width/2, p.position.y + p.size.height/2)
+                    CGPathMoveToPoint(ref, nil, p.position.x + p.size.width/2, p.position.y + getOffsetFromTileBottom())
                 } else {
-                    CGPathAddLineToPoint(ref, nil, p.position.x + p.size.width/2, p.position.y + p.size.height/2)
+                    CGPathAddLineToPoint(ref, nil, p.position.x + p.size.width/2, p.position.y + getOffsetFromTileBottom())
                 }
             }
         }
         return ref
     }
-    func movePlayer(dieRoll: Int, tileArray: [Foreground.Tile], runAfterActionCompletion: () -> Void) {
+    func movePlayer(dieRoll: Int, tileArray: [Foreground.Tile], runAfterActionCompletion: () -> Void) -> Bool{
         
         let sourceTile = getCurrentTile()
         let destinationTile = sourceTile + dieRoll;
@@ -83,11 +86,15 @@ class Player: SKSpriteNode {
                 ]), completion: runAfterActionCompletion);
             setCurrentTile(destinationTile)
             if (destinationTile == 100) {
+                return true
                 //Do Stuff
                 //self.removeAllChildren()
                 //self.view!.presentScene(scene)
             }
+            return false
         }
+        runAfterActionCompletion()
+        return false;
     }
     
     func movePlayerToTile(destinationTile:Int, tileArray: [Foreground.Tile], runAfterActionCompletion: () -> Void) {
