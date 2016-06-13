@@ -99,7 +99,7 @@ class Player: SKSpriteNode {
     
     func movePlayerToTile(destinationTile:Int, tileArray: [Foreground.Tile], runAfterActionCompletion: () -> Void) {
         let ref = createPathBetweenTiles(getCurrentTile(), destinationTile: destinationTile, tileArray: tileArray)
-        runAction(SKAction.sequence([SKAction.waitForDuration(1),SKAction.followPath(ref, asOffset: false, orientToPath: true, speed: 300)]), completion: runAfterActionCompletion)
+        runAction(SKAction.sequence([SKAction.waitForDuration(0.5),SKAction.followPath(ref, asOffset: false, orientToPath: true, speed: 300)]), completion: runAfterActionCompletion)
         setCurrentTile(destinationTile)
     }
 

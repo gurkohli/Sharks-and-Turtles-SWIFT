@@ -1,14 +1,223 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="LVB-YS-i5n">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="LCG-r7-ki7">
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--Game View Controller-->
+        <!--Main Menu Controller-->
+        <scene sceneID="6Ty-IZ-TsN">
+            <objects>
+                <viewController id="LCG-r7-ki7" customClass="MainMenuController" customModule="Sharks_and_Turtles" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="kpG-nP-fdg"/>
+                        <viewControllerLayoutGuide type="bottom" id="FBe-S2-D4e"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="i0D-cS-KBn">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YFp-gA-Vmi">
+                                <rect key="frame" x="189" y="270" width="221" height="60"/>
+                                <animations/>
+                                <state key="normal">
+                                    <attributedString key="attributedTitle">
+                                        <fragment content="Play Game">
+                                            <attributes>
+                                                <font key="NSFont" size="48" name="HoeflerText-Regular"/>
+                                            </attributes>
+                                        </fragment>
+                                    </attributedString>
+                                </state>
+                                <connections>
+                                    <segue destination="mZ8-2P-ob6" kind="show" identifier="playMainGame" id="HPB-L3-73m"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ful-Zo-ofF">
+                                <rect key="frame" x="438" y="365" width="120" height="36"/>
+                                <animations/>
+                                <state key="normal">
+                                    <attributedString key="attributedTitle">
+                                        <fragment content="Turtle Rush">
+                                            <attributes>
+                                                <font key="NSFont" size="24" name="HoeflerText-Regular"/>
+                                            </attributes>
+                                        </fragment>
+                                    </attributedString>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tRd-um-jBm">
+                                <rect key="frame" x="498" y="551" width="30" height="27"/>
+                                <animations/>
+                                <state key="normal">
+                                    <attributedString key="attributedTitle">
+                                        <fragment content="O">
+                                            <attributes>
+                                                <font key="NSFont" size="15" name="HoeflerText-Regular"/>
+                                            </attributes>
+                                        </fragment>
+                                    </attributedString>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="01h-5m-JIL">
+                                <rect key="frame" x="528" y="551" width="30" height="27"/>
+                                <animations/>
+                                <state key="normal">
+                                    <attributedString key="attributedTitle">
+                                        <fragment content="S">
+                                            <attributes>
+                                                <font key="NSFont" size="15" name="HoeflerText-Regular"/>
+                                            </attributes>
+                                        </fragment>
+                                    </attributedString>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mDp-wL-YQ4">
+                                <rect key="frame" x="42" y="365" width="133" height="36"/>
+                                <animations/>
+                                <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Shark Attack">
+                                    <attributedString key="attributedTitle">
+                                        <fragment content="Shark Attack">
+                                            <attributes>
+                                                <font key="NSFont" size="24" name="HoeflerText-Regular"/>
+                                            </attributes>
+                                        </fragment>
+                                    </attributedString>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="q0V-YS-5g1">
+                                <rect key="frame" x="468" y="551" width="30" height="27"/>
+                                <animations/>
+                                <state key="normal">
+                                    <attributedString key="attributedTitle">
+                                        <fragment content="T">
+                                            <attributes>
+                                                <font key="NSFont" size="15" name="HoeflerText-Regular"/>
+                                            </attributes>
+                                        </fragment>
+                                    </attributedString>
+                                </state>
+                            </button>
+                        </subviews>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="Ful-Zo-ofF" firstAttribute="bottom" secondItem="YFp-gA-Vmi" secondAttribute="bottom" constant="71" id="4Yb-ny-BsW"/>
+                            <constraint firstItem="mDp-wL-YQ4" firstAttribute="bottom" secondItem="YFp-gA-Vmi" secondAttribute="bottom" constant="71" id="5NF-WR-f8R"/>
+                            <constraint firstItem="FBe-S2-D4e" firstAttribute="top" secondItem="01h-5m-JIL" secondAttribute="bottom" constant="22" id="6Xu-xf-qs1"/>
+                            <constraint firstItem="01h-5m-JIL" firstAttribute="trailing" secondItem="Ful-Zo-ofF" secondAttribute="trailing" id="8pp-Ak-FBh"/>
+                            <constraint firstItem="Ful-Zo-ofF" firstAttribute="centerY" secondItem="mDp-wL-YQ4" secondAttribute="centerY" id="BSi-SG-2Fd"/>
+                            <constraint firstItem="YFp-gA-Vmi" firstAttribute="centerX" secondItem="i0D-cS-KBn" secondAttribute="centerX" id="EfN-y6-Omk"/>
+                            <constraint firstItem="tRd-um-jBm" firstAttribute="leading" secondItem="q0V-YS-5g1" secondAttribute="trailing" id="INj-10-qXu"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Ful-Zo-ofF" secondAttribute="trailing" constant="22" id="Ioq-qf-H9Z"/>
+                            <constraint firstItem="tRd-um-jBm" firstAttribute="centerY" secondItem="01h-5m-JIL" secondAttribute="centerY" id="PTo-6v-c25"/>
+                            <constraint firstItem="YFp-gA-Vmi" firstAttribute="centerY" secondItem="i0D-cS-KBn" secondAttribute="centerY" id="f9l-ep-vez"/>
+                            <constraint firstItem="01h-5m-JIL" firstAttribute="leading" secondItem="tRd-um-jBm" secondAttribute="trailing" id="fXo-Qh-9LJ"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="mDp-wL-YQ4" secondAttribute="leading" constant="-22" id="hEg-f3-6VQ"/>
+                            <constraint firstItem="q0V-YS-5g1" firstAttribute="centerY" secondItem="tRd-um-jBm" secondAttribute="centerY" id="hHp-cQ-cDf"/>
+                            <constraint firstItem="tRd-um-jBm" firstAttribute="width" secondItem="01h-5m-JIL" secondAttribute="width" id="ovT-vG-dW8"/>
+                            <constraint firstItem="tRd-um-jBm" firstAttribute="height" secondItem="01h-5m-JIL" secondAttribute="height" id="qcH-5f-yxo"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="F5l-Ld-8D5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-535" y="285"/>
+        </scene>
+        <!--Game Menu Controller-->
+        <scene sceneID="m54-Vj-4EW">
+            <objects>
+                <viewController id="mZ8-2P-ob6" customClass="GameMenuController" customModule="Sharks_and_Turtles" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="twI-os-KWH"/>
+                        <viewControllerLayoutGuide type="bottom" id="hiL-oe-nvn"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="7QG-gv-rh6">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qLV-dL-cO3">
+                                <rect key="frame" x="105" y="276" width="170" height="48"/>
+                                <animations/>
+                                <state key="normal">
+                                    <attributedString key="attributedTitle">
+                                        <fragment content="One Player">
+                                            <attributes>
+                                                <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <font key="NSFont" size="36" name="HoeflerText-Regular"/>
+                                            </attributes>
+                                        </fragment>
+                                    </attributedString>
+                                </state>
+                                <connections>
+                                    <segue destination="LVB-YS-i5n" kind="show" identifier="onePlayerMainGame" id="wvg-Xt-SKc"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LzP-Ur-kES">
+                                <rect key="frame" x="275" y="374" width="51" height="36"/>
+                                <animations/>
+                                <state key="normal">
+                                    <attributedString key="attributedTitle">
+                                        <fragment content="Back">
+                                            <attributes>
+                                                <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <font key="NSFont" size="24" name="HoeflerText-Regular"/>
+                                            </attributes>
+                                        </fragment>
+                                    </attributedString>
+                                </state>
+                                <connections>
+                                    <segue destination="LCG-r7-ki7" kind="show" id="AKO-mN-eyx"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EFt-ex-Rhm">
+                                <rect key="frame" x="326" y="276" width="170" height="48"/>
+                                <animations/>
+                                <state key="normal">
+                                    <attributedString key="attributedTitle">
+                                        <fragment content="Two Player">
+                                            <attributes>
+                                                <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <font key="NSFont" size="36" name="HoeflerText-Regular"/>
+                                            </attributes>
+                                        </fragment>
+                                    </attributedString>
+                                </state>
+                                <connections>
+                                    <segue destination="LVB-YS-i5n" kind="show" identifier="twoPlayerMainGame" id="GMj-yL-LKU"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="qLV-dL-cO3" firstAttribute="centerY" secondItem="EFt-ex-Rhm" secondAttribute="centerY" id="6Jz-vS-qJ1"/>
+                            <constraint firstItem="EFt-ex-Rhm" firstAttribute="height" secondItem="qLV-dL-cO3" secondAttribute="height" id="J9E-PS-oxb"/>
+                            <constraint firstItem="qLV-dL-cO3" firstAttribute="centerY" secondItem="7QG-gv-rh6" secondAttribute="centerY" id="NXu-Ia-ht7"/>
+                            <constraint firstItem="EFt-ex-Rhm" firstAttribute="width" secondItem="qLV-dL-cO3" secondAttribute="width" id="WlL-X0-iEp"/>
+                            <constraint firstItem="EFt-ex-Rhm" firstAttribute="leading" secondItem="LzP-Ur-kES" secondAttribute="trailing" id="bh2-lf-7Th"/>
+                            <constraint firstItem="qLV-dL-cO3" firstAttribute="trailing" secondItem="LzP-Ur-kES" secondAttribute="leading" id="ghU-bK-t6t"/>
+                            <constraint firstItem="LzP-Ur-kES" firstAttribute="centerX" secondItem="7QG-gv-rh6" secondAttribute="centerX" id="mO7-hM-ILB"/>
+                            <constraint firstItem="EFt-ex-Rhm" firstAttribute="bottom" secondItem="LzP-Ur-kES" secondAttribute="top" constant="-50" id="skl-Kp-KKM"/>
+                            <constraint firstItem="qLV-dL-cO3" firstAttribute="bottom" secondItem="LzP-Ur-kES" secondAttribute="top" constant="-50" id="tRu-xo-rmc"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="skl-Kp-KKM"/>
+                            </mask>
+                        </variation>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="WTe-dn-n9Z" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="188" y="299"/>
+        </scene>
+        <!--Main Game Controller-->
         <scene sceneID="CtS-rA-C9T">
             <objects>
-                <viewController id="LVB-YS-i5n" customClass="GameViewController" customModule="Sharks_and_Turtles" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="LVB-YS-i5n" customClass="MainGameController" customModule="Sharks_and_Turtles" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="PCf-gQ-wO7"/>
                         <viewControllerLayoutGuide type="bottom" id="b3d-qh-BLL"/>
@@ -22,6 +231,10 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="btX-cZ-eVz" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="923" y="285"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="wvg-Xt-SKc"/>
+    </inferredMetricsTieBreakers>
 </document>

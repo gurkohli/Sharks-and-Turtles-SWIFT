@@ -1,5 +1,5 @@
 		//
-//  GameScene.swift
+//  MainGame.swift
 //  Sharks and Turtles
 //
 //  Created by Gur Kohli on 2014-11-15.
@@ -10,7 +10,7 @@ import SpriteKit
 import GameplayKit
 
 @available(iOS 9.0, *)
-class GameScene: SKScene {
+class MainGame: SKScene {
 
     var bg: Background
     var fg: Foreground
@@ -18,7 +18,7 @@ class GameScene: SKScene {
     var player1: Player
     var player2: Player
     var isPlayer2Turn: Bool
-    var isPlayer2Computer: Bool
+    var isPlayer2Computer = false
     
     var dice: Dice
     var sharks: [Shark]
@@ -34,7 +34,7 @@ class GameScene: SKScene {
         var beginTiles: [Int]
         var endTiles: [Int]
     }
-    let SHARK_DATA = sharkTurtleData(count: 7, beginTiles: [17,52,57,63,88,95,98],endTiles: [13,29,40,22,18,73,3])
+    let SHARK_DATA = sharkTurtleData(count: 7, beginTiles: [17,52,57,63,88,95,98],endTiles: [13,29,40,22,18,73,4])
     let TURTLE_DATA = sharkTurtleData(count: 7, beginTiles: [3,8,28,58,75,80,90], endTiles: [21,30,84,77,86,100,91])
     
     override init(size: CGSize) {
@@ -53,7 +53,6 @@ class GameScene: SKScene {
         player1 = Player(nodeSize: playerSize, nodeColor: nil, nodePosition: player1Position);
         player2 = Player(nodeSize: playerSize, nodeColor: UIColor.whiteColor(), nodePosition: player2Position);
         isPlayer2Turn = false;
-        isPlayer2Computer = false;
         sharks = [Shark]();
         turtles = [Turtle]();
         dice = Dice(nodeSize: diceSize, nodePosition: dicePosition)
@@ -142,11 +141,12 @@ class GameScene: SKScene {
             func callback() {
                 var delayTime = Int64(100)
                 if (computer != nil) {
-                    delayTime = Int64(500)
+                    delayTime = Int64(1500)
                 }
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, delayTime * Int64(NSEC_PER_MSEC)), dispatch_get_main_queue(), {
                     self.userInteractionEnabled = true
                     if (computer != nil) {
+                        self.userInteractionEnabled = false
                         self.performPlayerAction(computer!,computer: nil)
                     }
                 })

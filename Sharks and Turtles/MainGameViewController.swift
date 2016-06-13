@@ -10,14 +10,16 @@ import UIKit
 import SpriteKit
 
 @available(iOS 9.0, *)
-class GameViewController: UIViewController {
+class MainGameController: UIViewController {
     
-    private var scene:GameScene!
+    private var scene:MainGame!
+    var isSinglePlayer = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        scene = GameScene(size: view.bounds.size)
+        scene = MainGame(size: view.bounds.size)
+        scene.isPlayer2Computer = isSinglePlayer
         // Configure the view.
         let skView = self.view as! SKView
         skView.showsFPS = true
