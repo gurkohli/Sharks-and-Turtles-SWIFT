@@ -12,6 +12,22 @@ class Foreground: SKSpriteNode {
 
     init(nodeSize: CGSize) {
         super.init(texture: nil, color: UIColor.clearColor(), size: nodeSize)
+        
+        var backgroundTexture = [SKTexture]()
+            
+        let backgroundAtlas = SKTextureAtlas(named: "Background")
+        for i in 7...11 {
+        let textureName = "BG\(i)"
+        let temp = backgroundAtlas.textureNamed(textureName)
+        backgroundTexture.append(temp)
+        }
+        for i in 0...4 {
+        let textureName = "BG\(11-i)"
+        let temp = backgroundAtlas.textureNamed(textureName)
+        backgroundTexture.append(temp)
+        }
+        runAction(SKAction.repeatActionForever(SKAction.animateWithTextures(backgroundTexture, timePerFrame: 0.20)))
+        size = nodeSize
     }
 
     override init(texture: SKTexture!, color: UIColor, size: CGSize) {

@@ -21,7 +21,7 @@ class Background: SKSpriteNode {
         zPosition = 1.0
         
         
-        let backgroundAtlas = SKTextureAtlas(named: "Background")
+        /*let backgroundAtlas = SKTextureAtlas(named: "Background")
         for i in 7...11 {
             let textureName = "BG\(i)"
             let temp = backgroundAtlas.textureNamed(textureName)
@@ -33,8 +33,10 @@ class Background: SKSpriteNode {
             backgroundTexture.append(temp)
         }
         runAction(SKAction.repeatActionForever(SKAction.animateWithTextures(backgroundTexture, timePerFrame: 0.20)))
+*/
         
         color = UIColor.blueColor()
+        alpha = 0.7
         colorBlendFactor = 0.3
     }
     

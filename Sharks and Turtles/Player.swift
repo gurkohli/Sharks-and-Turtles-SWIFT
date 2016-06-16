@@ -10,6 +10,8 @@ import SpriteKit
 
 class Player: SKSpriteNode {
     
+    var PLAYER_SPEED = CGFloat(100);
+    
     init(nodeSize: CGSize, nodeColor: UIColor?, nodePosition: CGPoint) {
         super.init(texture: nil, color: UIColor.clearColor(), size: nodeSize)
         
@@ -19,7 +21,7 @@ class Player: SKSpriteNode {
         position = nodePosition
         zPosition = 3.0
         userData = ["tilePosition": 1, "offsetFromTileBottom": position.y]
-        zRotation = 1.5708 //90 Degrees
+        zRotation = -1.5708 //90 Degrees
         color = UIColor.blackColor()
         if ((nodeColor) != nil) {
             color = nodeColor!
@@ -76,11 +78,11 @@ class Player: SKSpriteNode {
         
         if destinationTile <= 100 {
             runAction(SKAction.sequence([
-                SKAction.waitForDuration(0.2),
+                SKAction.waitForDuration(0.5),
                 SKAction.runBlock({
                     let ref = self.createPathBetweenTiles(sourceTile, destinationTile: destinationTile, tileArray: tileArray)
                     
-                    let action = SKAction.followPath(ref, asOffset: false, orientToPath: true, speed: 200);
+                    let action = SKAction.followPath(ref, asOffset: false, orientToPath: true, speed: self.PLAYER_SPEED);
                     self.runAction(action);
                 })
                 ]), completion: runAfterActionCompletion);
@@ -99,7 +101,7 @@ class Player: SKSpriteNode {
     
     func movePlayerToTile(destinationTile:Int, tileArray: [Foreground.Tile], runAfterActionCompletion: () -> Void) {
         let ref = createPathBetweenTiles(getCurrentTile(), destinationTile: destinationTile, tileArray: tileArray)
-        runAction(SKAction.sequence([SKAction.waitForDuration(0.5),SKAction.followPath(ref, asOffset: false, orientToPath: true, speed: 300)]), completion: runAfterActionCompletion)
+        runAction(SKAction.sequence([SKAction.waitForDuration(0.5),SKAction.followPath(ref, asOffset: false, orientToPath: true, speed: PLAYER_SPEED + 100)]), completion: runAfterActionCompletion)
         setCurrentTile(destinationTile)
     }
 

@@ -13,7 +13,7 @@ import SpriteKit
 class MainGameController: UIViewController {
     
     private var scene:MainGame!
-    var isSinglePlayer = false
+    var isSinglePlayer = true
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -14,11 +14,12 @@ class MainGame: SKScene {
 
     var bg: Background
     var fg: Foreground
+    var playerCam: SKCameraNode!
     
     var player1: Player
     var player2: Player
     var isPlayer2Turn: Bool
-    var isPlayer2Computer = false
+    var isPlayer2Computer = true
     
     var dice: Dice
     var sharks: [Shark]
@@ -28,6 +29,8 @@ class MainGame: SKScene {
     var sharkHandlerNode: SKSpriteNode
     var turtleHandlerNode: SKSpriteNode
     var playerHandlerNode: SKSpriteNode
+    
+    var cameraHandlerNode: SKSpriteNode
     
     struct sharkTurtleData {
         var count: Int
@@ -39,31 +42,35 @@ class MainGame: SKScene {
     
     override init(size: CGSize) {
         let frameSize = size
-        let tileSize = CGSizeMake(frameSize.width/10 - 2, frameSize.height/10 - 2);
+        let fgSize = CGSizeMake(frameSize.width/2, frameSize.height/2)
+        let tileSize = CGSizeMake(fgSize.width/10 - 2, fgSize.height/10 - 2);
         let playerSize = CGSizeMake(tileSize.width/2, tileSize.height/2)
         //TODO Add Dice Size when Adding Dice Textures
         let diceSize = CGSizeMake(0, 0)
         
         let player1Position = CGPointMake(playerSize.width, playerSize.height/2)
         let player2Position = CGPointMake(playerSize.width, playerSize.height*3/2)
-        let dicePosition = CGPointMake(size.width - 25, size.height-40)
+        let dicePosition = CGPointMake(fgSize.width - 25, fgSize.height-40)
         
         bg = Background(nodeSize: frameSize);
-        fg = Foreground(nodeSize: frameSize);
+        fg = Foreground(nodeSize: fgSize);
+        
+        playerCam = SKCameraNode()
         player1 = Player(nodeSize: playerSize, nodeColor: nil, nodePosition: player1Position);
         player2 = Player(nodeSize: playerSize, nodeColor: UIColor.whiteColor(), nodePosition: player2Position);
         isPlayer2Turn = false;
         sharks = [Shark]();
         turtles = [Turtle]();
         dice = Dice(nodeSize: diceSize, nodePosition: dicePosition)
-        tileArray = [Foreground.Tile(size: frameSize, position: CGPointMake(0,0))]
+        tileArray = [Foreground.Tile(size: tileSize, position: CGPointMake(0,0))]
 
         sharkHandlerNode = SKSpriteNode();
         turtleHandlerNode = SKSpriteNode();
         playerHandlerNode = SKSpriteNode()
         
+        cameraHandlerNode = SKSpriteNode();
+        
         super.init(size: size)
-
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -76,6 +83,10 @@ class MainGame: SKScene {
         tileArray = fg.loadGrid()
         playerHandlerNode.addChild(player1)
         playerHandlerNode.addChild(player2)
+        
+        cameraHandlerNode.position = CGPointMake(abs(player2.position.x + player1.position.x)/2, abs(player2.position.y + player1.position.y)/2)
+        cameraHandlerNode.size = CGSizeMake(abs(player2.position.x - player1.position.x), abs(player2.position.y - player1.position.y))
+        cameraHandlerNode.anchorPoint = CGPointMake(0.5,0.5)
         
         for var i=0; i < SHARK_DATA.count; i++ {
             let tile = tileArray[SHARK_DATA.beginTiles[i]]
@@ -96,12 +107,23 @@ class MainGame: SKScene {
             turtles.append(Turtle(nodeSize: turtleSize, nodePosition:turtlePosition))
             turtleHandlerNode.addChild(turtles[i])
         }
+        //self.camera = playerCam
+        self.camera?.position = cameraHandlerNode.position
+        self.camera?.setScale(0.5)
         
+        fg.position = CGPointMake(fg.size.width/2, fg.size.height/2)
+        fg.color = UIColor.greenColor()
+        fg.anchorPoint = CGPointMake(0,0)
+        bg.anchorPoint = CGPointMake(0,0)
+        //anchorPoint = CGPointMake(0.2,0.2)
+        fg.addChild(playerCam)
         addChild(bg)
-        addChild(playerHandlerNode)
-        addChild(dice)
-        addChild(sharkHandlerNode)
-        addChild(turtleHandlerNode)
+        fg.addChild(playerHandlerNode)
+        //camera!.addChild(dice)
+        fg.addChild(sharkHandlerNode)
+        fg.addChild(turtleHandlerNode)
+        fg.addChild(cameraHandlerNode)
+        addChild(fg)
     }
     
     func isSharkOnTile(currentTile: Int) -> Bool{
@@ -149,6 +171,7 @@ class MainGame: SKScene {
                         self.userInteractionEnabled = false
                         self.performPlayerAction(computer!,computer: nil)
                     }
+                    self.isPlayer2Turn = !self.isPlayer2Turn
                 })
             }
             if (self.isSharkOnTile(currentTile)) {
@@ -174,10 +197,10 @@ class MainGame: SKScene {
             } else {
                 if (!isPlayer2Turn) {
                     gameEnd = performPlayerAction(player1, computer: nil)
-                    isPlayer2Turn = true
+                    //isPlayer2Turn = true
                 } else {
                     gameEnd = performPlayerAction(player2, computer: nil)
-                    isPlayer2Turn = false
+                    //isPlayer2Turn = false
                 }
             }
             if (gameEnd) {
@@ -190,6 +213,10 @@ class MainGame: SKScene {
    
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
+        cameraHandlerNode.position = CGPointMake(abs(player2.position.x + player1.position.x)/2, abs(player2.position.y + player1.position.y)/2)
+        cameraHandlerNode.size = CGSizeMake(abs(player2.position.x - player1.position.x), abs(player2.position.y - player1.position.y))
+        let action = SKAction.moveTo(cameraHandlerNode.position, duration: 1)
+        playerCam.runAction(action)
     }
     
 }
