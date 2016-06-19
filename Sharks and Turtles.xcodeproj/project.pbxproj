@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A920710C1D16256A0052239C /* Scrap Stuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = A920710B1D16256A0052239C /* Scrap Stuff.swift */; };
 		A9432E7B1D0D035C00B9E0B0 /* MainMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9432E7A1D0D035C00B9E0B0 /* MainMenuViewController.swift */; };
 		A9432E7D1D0E1DCA00B9E0B0 /* GameMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9432E7C1D0E1DCA00B9E0B0 /* GameMenuViewController.swift */; };
 		A99F9D901D08BB150045F9BD /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99F9D8F1D08BB150045F9BD /* Player.swift */; };
@@ -15,7 +16,6 @@
 		A99F9D961D08CB160045F9BD /* Dice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A99F9D951D08CB160045F9BD /* Dice.swift */; };
 		A9A5713C1A2436CE00025AEF /* Background.atlas in Resources */ = {isa = PBXBuildFile; fileRef = A9A5713B1A2436CE00025AEF /* Background.atlas */; };
 		A9AE808F1A1827C800708A7C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AE808E1A1827C800708A7C /* AppDelegate.swift */; };
-		A9AE80911A1827C800708A7C /* MainGame.sks in Resources */ = {isa = PBXBuildFile; fileRef = A9AE80901A1827C800708A7C /* MainGame.sks */; };
 		A9AE80931A1827C800708A7C /* MainGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AE80921A1827C800708A7C /* MainGame.swift */; };
 		A9AE80951A1827C800708A7C /* MainGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AE80941A1827C800708A7C /* MainGameViewController.swift */; };
 		A9AE80981A1827C800708A7C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9AE80961A1827C800708A7C /* Main.storyboard */; };
@@ -37,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A920710B1D16256A0052239C /* Scrap Stuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Scrap Stuff.swift"; sourceTree = "<group>"; };
 		A9432E7A1D0D035C00B9E0B0 /* MainMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuViewController.swift; sourceTree = "<group>"; };
 		A9432E7C1D0E1DCA00B9E0B0 /* GameMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameMenuViewController.swift; sourceTree = "<group>"; };
 		A99F9D8F1D08BB150045F9BD /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
@@ -47,7 +48,6 @@
 		A9AE80891A1827C800708A7C /* Sharks and Turtles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sharks and Turtles.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9AE808D1A1827C800708A7C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A9AE808E1A1827C800708A7C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		A9AE80901A1827C800708A7C /* MainGame.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MainGame.sks; sourceTree = "<group>"; };
 		A9AE80921A1827C800708A7C /* MainGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainGame.swift; sourceTree = "<group>"; };
 		A9AE80941A1827C800708A7C /* MainGameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainGameViewController.swift; sourceTree = "<group>"; };
 		A9AE80971A1827C800708A7C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -109,11 +109,11 @@
 			children = (
 				A9A547CC1A185A14008F9450 /* Resources */,
 				A9AE808E1A1827C800708A7C /* AppDelegate.swift */,
-				A9AE80901A1827C800708A7C /* MainGame.sks */,
 				A9AE80921A1827C800708A7C /* MainGame.swift */,
 				A99F9D951D08CB160045F9BD /* Dice.swift */,
 				A99F9D8F1D08BB150045F9BD /* Player.swift */,
 				A9D1EF2B1D08E9C300E476D4 /* Shark.swift */,
+				A920710B1D16256A0052239C /* Scrap Stuff.swift */,
 				A9D1EF2D1D0A34D900E476D4 /* Turtle.swift */,
 				A99F9D931D08C95A0045F9BD /* Foreground.swift */,
 				A99F9D911D08C0C30045F9BD /* Background.swift */,
@@ -238,7 +238,6 @@
 			files = (
 				A9AE809D1A1827C800708A7C /* LaunchScreen.xib in Resources */,
 				A9AE809A1A1827C800708A7C /* Images.xcassets in Resources */,
-				A9AE80911A1827C800708A7C /* MainGame.sks in Resources */,
 				A9A5713C1A2436CE00025AEF /* Background.atlas in Resources */,
 				A9AE80981A1827C800708A7C /* Main.storyboard in Resources */,
 			);
@@ -259,6 +258,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A99F9D901D08BB150045F9BD /* Player.swift in Sources */,
+				A920710C1D16256A0052239C /* Scrap Stuff.swift in Sources */,
 				A99F9D961D08CB160045F9BD /* Dice.swift in Sources */,
 				A9AE80931A1827C800708A7C /* MainGame.swift in Sources */,
 				A9AE80951A1827C800708A7C /* MainGameViewController.swift in Sources */,
