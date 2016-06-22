@@ -30,8 +30,17 @@ class MainGameController: UIViewController {
             
         /* Set the scale mode to scale to fit the window */
         scene.scaleMode = .AspectFill
-            
+        
+        scene.viewController = self;
+        
         skView.presentScene(scene)
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        let skView = self.view as! SKView
+        
+        skView.presentScene(nil)
+        self.view = nil
     }
 
     override func shouldAutorotate() -> Bool {
@@ -53,5 +62,10 @@ class MainGameController: UIViewController {
 
     override func prefersStatusBarHidden() -> Bool {
         return true
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "endGame" {
+        }
     }
 }

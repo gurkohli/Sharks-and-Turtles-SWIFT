@@ -169,7 +169,7 @@
                                     </attributedString>
                                 </state>
                                 <connections>
-                                    <segue destination="LCG-r7-ki7" kind="show" id="AKO-mN-eyx"/>
+                                    <segue destination="LCG-r7-ki7" kind="show" identifier="backToMainMenu" id="AKO-mN-eyx"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EFt-ex-Rhm">
@@ -214,25 +214,6 @@
             </objects>
             <point key="canvasLocation" x="188" y="299"/>
         </scene>
-        <!--Zoom Controller-->
-        <scene sceneID="oeg-q9-OWK">
-            <objects>
-                <viewController id="jyk-mw-9C1" customClass="ZoomController" customModule="Sharks_and_Turtles" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="hrh-X0-B1g"/>
-                        <viewControllerLayoutGuide type="bottom" id="WCl-E5-JoG"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="nb4-Jx-Mup" customClass="SKView">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <animations/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ZJ7-hD-kNJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="413" y="1056"/>
-        </scene>
         <!--Main Game Controller-->
         <scene sceneID="CtS-rA-C9T">
             <objects>
@@ -247,13 +228,17 @@
                         <animations/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <connections>
+                        <segue destination="LCG-r7-ki7" kind="show" identifier="endGame" id="oQd-X5-kWc"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="btX-cZ-eVz" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="923" y="285"/>
+            <point key="canvasLocation" x="935" y="273"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="wvg-Xt-SKc"/>
+        <segue reference="AKO-mN-eyx"/>
+        <segue reference="GMj-yL-LKU"/>
     </inferredMetricsTieBreakers>
 </document>

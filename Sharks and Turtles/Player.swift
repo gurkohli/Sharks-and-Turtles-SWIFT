@@ -19,7 +19,7 @@ class Player: SKSpriteNode {
         size = nodeSize
         anchorPoint = CGPointMake(0.5,0.5)
         position = nodePosition
-        zPosition = 3.0
+        zPosition = 10.0
         userData = ["tilePosition": 1, "offsetFromTileBottom": position.y]
         zRotation = -1.5708 //90 Degrees
         color = UIColor.blackColor()
@@ -83,9 +83,9 @@ class Player: SKSpriteNode {
                     let ref = self.createPathBetweenTiles(sourceTile, destinationTile: destinationTile, tileArray: tileArray)
                     
                     let action = SKAction.followPath(ref, asOffset: false, orientToPath: true, speed: self.PLAYER_SPEED);
-                    self.runAction(action);
+                    self.runAction(action, completion: runAfterActionCompletion);
                 })
-                ]), completion: runAfterActionCompletion);
+                ]));
             setCurrentTile(destinationTile)
             if (destinationTile == 100) {
                 return true

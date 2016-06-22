@@ -13,15 +13,14 @@ class Background: SKSpriteNode {
     init(nodeSize: CGSize) {
         super.init(texture: nil, color: UIColor.clearColor(), size: nodeSize)
         
-        var backgroundTexture = [SKTexture]()
-        
-        name = "Background"
+        name = "background"
         size = nodeSize
         anchorPoint = CGPointMake(0.0,0.0)
-        zPosition = 1.0
+        zPosition = -10.0
         
+        /*var backgroundTexture = [SKTexture]()
         
-        /*let backgroundAtlas = SKTextureAtlas(named: "Background")
+        let backgroundAtlas = SKTextureAtlas(named: "Background")
         for i in 7...11 {
             let textureName = "BG\(i)"
             let temp = backgroundAtlas.textureNamed(textureName)

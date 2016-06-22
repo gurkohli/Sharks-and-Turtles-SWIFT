@@ -13,6 +13,11 @@ class Foreground: SKSpriteNode {
     init(nodeSize: CGSize) {
         super.init(texture: nil, color: UIColor.clearColor(), size: nodeSize)
         
+        name = "foreground"
+        anchorPoint = CGPointMake(0,0)
+        position = CGPointZero
+        color = UIColor.blueColor()
+        alpha = 0.5
         var backgroundTexture = [SKTexture]()
             
         let backgroundAtlas = SKTextureAtlas(named: "Background")
