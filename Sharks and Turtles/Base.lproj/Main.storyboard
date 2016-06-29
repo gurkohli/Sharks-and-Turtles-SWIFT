@@ -229,7 +229,7 @@
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <connections>
-                        <segue destination="LCG-r7-ki7" kind="show" identifier="endGame" id="oQd-X5-kWc"/>
+                        <segue destination="LCG-r7-ki7" kind="showDetail" identifier="toMainMenu" id="XUx-gn-GS7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="btX-cZ-eVz" sceneMemberID="firstResponder"/>

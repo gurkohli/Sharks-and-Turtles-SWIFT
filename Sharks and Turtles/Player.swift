@@ -11,6 +11,7 @@ import SpriteKit
 class Player: SKSpriteNode {
     
     var PLAYER_SPEED = CGFloat(100);
+    var offsetFromTileBottom = CGFloat(0);
     
     init(nodeSize: CGSize, nodeColor: UIColor?, nodePosition: CGPoint) {
         super.init(texture: nil, color: UIColor.clearColor(), size: nodeSize)
@@ -20,7 +21,8 @@ class Player: SKSpriteNode {
         anchorPoint = CGPointMake(0.5,0.5)
         position = nodePosition
         zPosition = 10.0
-        userData = ["tilePosition": 1, "offsetFromTileBottom": position.y]
+        userData = ["tilePosition": 1]
+        offsetFromTileBottom = position.y
         zRotation = -1.5708 //90 Degrees
         color = UIColor.blackColor()
         if ((nodeColor) != nil) {
@@ -42,9 +44,6 @@ class Player: SKSpriteNode {
     func setCurrentTile(currentTile: Int) {
         userData!["tilePosition"] = currentTile
     }
-    func getOffsetFromTileBottom() -> CGFloat {
-        return userData!.objectForKey("offsetFromTileBottom") as! CGFloat
-    }
     
     func createPathBetweenTiles(sourceTile: Int, destinationTile: Int, tileArray:[Foreground.Tile]) -> CGPath {
         let ref = CGPathCreateMutable()
@@ -53,9 +52,9 @@ class Player: SKSpriteNode {
                 let p = tileArray[i]
                 
                 if i == sourceTile {
-                    CGPathMoveToPoint(ref, nil, p.position.x + p.size.width/2, p.position.y + getOffsetFromTileBottom())
+                    CGPathMoveToPoint(ref, nil, p.position.x + p.size.width/2, p.position.y + offsetFromTileBottom)
                 } else {
-                    CGPathAddLineToPoint(ref, nil, p.position.x + p.size.width/2, p.position.y + getOffsetFromTileBottom())
+                    CGPathAddLineToPoint(ref, nil, p.position.x + p.size.width/2, p.position.y + offsetFromTileBottom)
                 }
             }
         } else if (sourceTile > destinationTile) {
@@ -63,15 +62,16 @@ class Player: SKSpriteNode {
                 let p = tileArray[i]
                 
                 if i == sourceTile {
-                    CGPathMoveToPoint(ref, nil, p.position.x + p.size.width/2, p.position.y + getOffsetFromTileBottom())
+                    CGPathMoveToPoint(ref, nil, p.position.x + p.size.width/2, p.position.y + offsetFromTileBottom)
                 } else {
-                    CGPathAddLineToPoint(ref, nil, p.position.x + p.size.width/2, p.position.y + getOffsetFromTileBottom())
+                    CGPathAddLineToPoint(ref, nil, p.position.x + p.size.width/2, p.position.y + offsetFromTileBottom)
                 }
             }
         }
         return ref
     }
-    func movePlayer(dieRoll: Int, tileArray: [Foreground.Tile], runAfterActionCompletion: () -> Void) -> Bool{
+    
+    func movePlayer(dieRoll: Int, tileArray: [Foreground.Tile], runAfterActionCompletion: () -> Void) {
         
         let sourceTile = getCurrentTile()
         let destinationTile = sourceTile + dieRoll;
@@ -88,20 +88,17 @@ class Player: SKSpriteNode {
                 ]));
             setCurrentTile(destinationTile)
             if (destinationTile == 100) {
-                return true
-                //Do Stuff
-                //self.removeAllChildren()
-                //self.view!.presentScene(scene)
+                
             }
-            return false
+        } else {
+            runAfterActionCompletion()
         }
-        runAfterActionCompletion()
-        return false;
     }
     
     func movePlayerToTile(destinationTile:Int, tileArray: [Foreground.Tile], runAfterActionCompletion: () -> Void) {
         let ref = createPathBetweenTiles(getCurrentTile(), destinationTile: destinationTile, tileArray: tileArray)
-        runAction(SKAction.sequence([SKAction.waitForDuration(0.5),SKAction.followPath(ref, asOffset: false, orientToPath: true, speed: PLAYER_SPEED + 100)]), completion: runAfterActionCompletion)
+        let tileDifference = Double(abs(destinationTile - getCurrentTile()))
+        runAction(SKAction.sequence([SKAction.waitForDuration(0.5),SKAction.followPath(ref, asOffset: false, orientToPath: true, speed: PLAYER_SPEED + 100 + CGFloat(1.2 * tileDifference))]), completion: runAfterActionCompletion)
         setCurrentTile(destinationTile)
     }
 

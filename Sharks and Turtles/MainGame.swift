@@ -13,11 +13,17 @@ import GameplayKit
 class MainGame: SKScene {
     weak var viewController = MainGameController()
     
+    let events = EventManager()
+    let GAME_OVER_EVENT = "gameOver"
+    
     var bg: Background
     var fg: Foreground
     var gameMasterNode: SKSpriteNode
     var pauseMenu: PauseMenu
+    var gameOverMenu: GameOverMenu
     var birdEyeCam: SKCameraNode!
+    var hudNode: SKSpriteNode
+    var curPlayerLabel: SKLabelNode
     
     var player1: Player
     var player2: Player
@@ -25,6 +31,7 @@ class MainGame: SKScene {
     var isPlayer2Computer = false
     var curPlayer = Player()
     var isGamePaused = false
+    var isGameOver = false
     
     var dice: Dice
     var pauseButton: SKSpriteNode
@@ -47,7 +54,8 @@ class MainGame: SKScene {
     
     override init(size: CGSize) {
         let frameSize = size
-        let fgSize = CGSizeMake(frameSize.width/2, frameSize.height/2)
+        let hudSize = CGSizeMake(frameSize.width/2, frameSize.height/25)
+        let fgSize = CGSizeMake(frameSize.width/2, frameSize.height/2 - hudSize.height)
         let tileSize = CGSizeMake(fgSize.width/10 - 2, fgSize.height/10 - 2);
         let playerSize = CGSizeMake(tileSize.width/2, tileSize.height/2)
         let pauseMenuSize = CGSizeMake(fgSize.width/1.5, fgSize.height/2)
@@ -62,6 +70,7 @@ class MainGame: SKScene {
         bg = Background(nodeSize: frameSize);
         fg = Foreground(nodeSize: fgSize);
         pauseMenu = PauseMenu(nodeSize: pauseMenuSize);
+        gameOverMenu = GameOverMenu(nodeSize: pauseMenuSize)
         
         birdEyeCam = SKCameraNode()
         player1 = Player(nodeSize: playerSize, nodeColor: nil, nodePosition: player1Position);
@@ -71,9 +80,21 @@ class MainGame: SKScene {
         turtles = [Turtle]();
         dice = Dice(nodeSize: diceSize, nodePosition: dicePosition)
         
-        pauseButton = SKSpriteNode(color: UIColor.brownColor(), size: CGSizeMake(30, 30))
+        hudNode = SKSpriteNode(color: UIColor.clearColor(), size: hudSize)
+        hudNode.position = CGPointMake(0, fgSize.height)
+        hudNode.anchorPoint = CGPointZero
+        //hudNode.alpha = 0.4
+        curPlayerLabel = SKLabelNode(fontNamed: "AmericanTypewriter")
+        curPlayerLabel.verticalAlignmentMode = .Bottom
+        curPlayerLabel.horizontalAlignmentMode = .Left
+        curPlayerLabel.position = CGPointMake(10, 2)
+        curPlayerLabel.fontSize = 20.0
+        curPlayerLabel.text = "Player 1"
+        
+        pauseButton = SKSpriteNode(color: UIColor.brownColor(), size: CGSizeMake(20, 20))
         pauseButton.name = "pauseButton"
-        pauseButton.position = CGPointMake(dicePosition.x - 20, dicePosition.y)
+        pauseButton.anchorPoint = CGPointMake(1, 0.5)
+        pauseButton.position = CGPointMake(hudNode.size.width - 5, hudNode.size.height/2)
         pauseButton.zPosition = 50
         tileArray = [Foreground.Tile(size: tileSize, position: CGPointMake(0,0))]
         labelArray = [SKLabelNode]()
@@ -83,6 +104,8 @@ class MainGame: SKScene {
         playerHandlerNode = SKSpriteNode()
         
         super.init(size: size)
+        
+        events.listenTo(GAME_OVER_EVENT, action: self.endGame)
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -182,14 +205,18 @@ class MainGame: SKScene {
         //fg.position = CGPointMake(size.width/4, size.height/4)
         
         pauseMenu.position = CGPointMake(size.width/2, size.height/2)
+        gameOverMenu.position = pauseMenu.position
         
         camera?.addChild(dice)
-        camera?.addChild(pauseButton)
+        
+        hudNode.addChild(pauseButton)
+        hudNode.addChild(curPlayerLabel)
         
         gameMasterNode.name = "gameMasterNode"
         gameMasterNode.position = CGPointMake(size.width/4, size.height/4)
         gameMasterNode.anchorPoint = CGPointMake(0, 0)
         
+        gameMasterNode.addChild(hudNode)
         gameMasterNode.addChild(fg)
         gameMasterNode.addChild(playerHandlerNode)
         gameMasterNode.addChild(sharkHandlerNode)
@@ -199,11 +226,7 @@ class MainGame: SKScene {
         addChild(bg)
         addChild(gameMasterNode)
     }
-    
-    func loadSharkTurtlePath() {
-        
-    }
-    
+
     func isSharkOnTile(currentTile: Int) -> Bool{
         if SHARK_DATA.beginTiles.contains(currentTile) {
             return true;
@@ -234,20 +257,25 @@ class MainGame: SKScene {
         return -1
     }
     
-    func performPlayerAction(currentPlayer: Player, computer: Player?) -> Bool{
-        let dieRoll = self.dice.rollDice()
+    func performPlayerAction(currentPlayer: Player, computer: Player?) {
+        let dieRoll = 1//self.dice.rollDice()
         func checkSharksAndTurtles() {
             curPlayer = currentPlayer;
             let currentTile = currentPlayer.getCurrentTile()
-            func callback() {
-                let delayTime = Int64(100)
+            func callback(){
+                let delayTime = Int64(50)
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, delayTime * Int64(NSEC_PER_MSEC)), dispatch_get_main_queue(), {
                     self.userInteractionEnabled = true
+                    if (currentTile >= 100) {
+                        self.events.trigger(self.GAME_OVER_EVENT)
+                        return
+                    }
                     if (computer != nil) {
                         self.userInteractionEnabled = false
                         self.performPlayerAction(computer!,computer: nil)
                     }
                     self.isPlayer2Turn = !self.isPlayer2Turn
+                    self.curPlayerLabel.text = self.curPlayer == self.player1 ? "Player 2" : "Player 1"
                 })
             }
             if (self.isSharkOnTile(currentTile)) {
@@ -258,10 +286,8 @@ class MainGame: SKScene {
             } else {
                 callback();
             }
-            //self.userInteractionEnabled = true;
         }
-        
-        return currentPlayer.movePlayer(dieRoll, tileArray: tileArray, runAfterActionCompletion:checkSharksAndTurtles)
+        currentPlayer.movePlayer(dieRoll, tileArray: tileArray, runAfterActionCompletion:checkSharksAndTurtles)
     }
     
     func restartGame() {
@@ -276,6 +302,62 @@ class MainGame: SKScene {
         self.view!.presentScene(mainGame, transition: transition)
     }
     
+    func endGame() {
+        self.userInteractionEnabled = true;
+        gameOverMenu.winningPlayerNode.text = (curPlayer == self.player1 ? "Player 1" : "Player 2") + " wins!";
+        gameMasterNode.paused = true;
+        gameMasterNode.alpha = 0.4
+        gameOverMenu.setScale(0)
+        addChild(gameOverMenu)
+        let expand = SKAction.scaleTo(1.2, duration: 0.2)
+        let bringBack = SKAction.scaleTo(1, duration: 0.1)
+        gameOverMenu.runAction(SKAction.sequence([expand, bringBack]), completion: {self.isGameOver = true});
+    }
+    
+    func pauseGame() {
+        gameMasterNode.paused = true;
+        gameMasterNode.alpha = 0.4
+        pauseMenu.setScale(0)
+        addChild(pauseMenu)
+        let expand = SKAction.scaleTo(1.2, duration: 0.2)
+        let bringBack = SKAction.scaleTo(1, duration: 0.1)
+        pauseMenu.runAction(SKAction.sequence([expand, bringBack]), completion: {self.isGamePaused = true});
+    }
+    
+    func pauseMenuHandler(touchedNode: SKNode, touchedPoint: CGPoint) {
+        if (CGRectContainsPoint(gameMasterNode.frame, touchedPoint) && !CGRectContainsPoint(pauseMenu.frame, touchedPoint) || touchedNode.name == pauseMenu.RESUME_BUTTON_NODE_NAME) {
+            let expand = SKAction.scaleTo(1.2, duration: 0.1)
+            let bringBack = SKAction.scaleTo(0, duration: 0.2)
+            pauseMenu.runAction(SKAction.sequence([expand, bringBack]), completion: {
+                self.pauseMenu.removeFromParent()
+                self.gameMasterNode.alpha = 1
+                self.gameMasterNode.paused = false
+                self.isGamePaused = false;
+            });
+        }
+            
+        else if (touchedNode.name == pauseMenu.RESTART_BUTTON_NODE_NAME) {
+            restartGame()
+        }
+            
+        else if (touchedNode.name == pauseMenu.END_GAME_BUTTON_NODE_NAME) {
+            //self.viewController!.performSegueWithIdentifier("endGame", sender: nil)
+            if (self.viewController?.presentingViewController != nil) {
+                self.viewController?.dismissViewControllerAnimated(true, completion: nil)
+            }
+        }
+    }
+    
+    func gameOverMenuHandler(touchedNode: SKNode) {
+        if (touchedNode.name == gameOverMenu.PLAY_AGAIN_BUTTON_NODE) {
+            restartGame()
+        } else if (touchedNode.name == gameOverMenu.EXIT_GAME_BUTTON_NODE) {
+            if (self.viewController?.presentingViewController != nil) {
+                self.viewController?.dismissViewControllerAnimated(true, completion: nil)
+            }
+        }
+    }
+    
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         /* Called when a touch begins */
         for touch: AnyObject in touches {
@@ -285,49 +367,23 @@ class MainGame: SKScene {
             let touchedNode = self.nodeAtPoint(sceneTouchPoint)
             print(touchedNode.name)
             if (!isGamePaused && touchedNode.name == pauseButton.name) {
-                gameMasterNode.paused = true;
-                gameMasterNode.alpha = 0.4
-                pauseMenu.setScale(0)
-                addChild(pauseMenu)
-                let expand = SKAction.scaleTo(1.2, duration: 0.2)
-                let bringBack = SKAction.scaleTo(1, duration: 0.1)
-                pauseMenu.runAction(SKAction.sequence([expand, bringBack]), completion: {self.isGamePaused = true});
+                pauseGame()
+                
             } else if (isGamePaused) {
-                if (CGRectContainsPoint(gameMasterNode.frame, sceneTouchPoint) && !CGRectContainsPoint(pauseMenu.frame, sceneTouchPoint) || touchedNode.name == pauseMenu.RESUME_BUTTON_NODE_NAME) {
-                    let expand = SKAction.scaleTo(1.2, duration: 0.1)
-                    let bringBack = SKAction.scaleTo(0, duration: 0.2)
-                    pauseMenu.runAction(SKAction.sequence([expand, bringBack]), completion: {
-                        self.pauseMenu.removeFromParent()
-                        self.gameMasterNode.alpha = 1
-                        self.gameMasterNode.paused = false
-                        self.isGamePaused = false;
-                    });
-                }
+                pauseMenuHandler(touchedNode, touchedPoint: sceneTouchPoint)
                 
-                else if (touchedNode.name == pauseMenu.RESTART_BUTTON_NODE_NAME) {
-                    restartGame()
-                }
-                
-                else if (touchedNode.name == pauseMenu.END_GAME_BUTTON_NODE_NAME) {
-                    //self.viewController!.performSegueWithIdentifier("endGame", sender: nil)
-                    self.viewController?.dismissViewControllerAnimated(true, completion: nil)
-                }
-                
+            } else if (isGameOver) {
+                gameOverMenuHandler(touchedNode)
             } else {
                 self.userInteractionEnabled = false;
-                var gameEnd = false;
                 if (isPlayer2Computer) {
-                    gameEnd = performPlayerAction(player1, computer: player2)
+                     performPlayerAction(player1, computer: player2)
                 } else {
                     if (!isPlayer2Turn) {
-                        gameEnd = performPlayerAction(player1, computer: nil)
+                        performPlayerAction(player1, computer: nil)
                     } else {
-                        gameEnd = performPlayerAction(player2, computer: nil)
+                        performPlayerAction(player2, computer: nil)
                     }
-                }
-                if (gameEnd) {
-                    //Do Stuff
-                    restartGame()
                 }
             }
         }
@@ -335,7 +391,6 @@ class MainGame: SKScene {
     
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
-
     }
     
     deinit {

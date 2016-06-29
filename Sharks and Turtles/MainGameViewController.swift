@@ -14,6 +14,7 @@ class MainGameController: UIViewController {
     
     private var scene:MainGame!
     var isSinglePlayer = true
+    weak var gameMenuController = UIViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()

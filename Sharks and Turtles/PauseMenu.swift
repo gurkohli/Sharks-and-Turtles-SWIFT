@@ -8,30 +8,18 @@
 
 import SpriteKit
 
-class PauseMenu: SKSpriteNode {
+class PauseMenu: PopupMenu {
     
     let RESUME_BUTTON_NODE_NAME = "resumeButton"
     let RESTART_BUTTON_NODE_NAME = "restartButton"
     let OPTIONS_BUTTON_NODE_NAME = "optionsButton"
     let END_GAME_BUTTON_NODE_NAME = "endGameButton"
     
-    init(nodeSize: CGSize) {
-        super.init(texture: nil, color: UIColor.clearColor(), size: nodeSize)
+    override init(nodeSize: CGSize) {
+        super.init(nodeSize: nodeSize)
         
         name = "pauseMenu"
-        size = nodeSize
-        anchorPoint = CGPointMake(0.5, 0.5)
-        zPosition = 100.0
-        color = UIColor.clearColor()
-        
-        let ref = CGPathCreateWithRoundedRect(CGRectMake(-nodeSize.width/2, -nodeSize.height/2, nodeSize.width, nodeSize.height), 5, 5, nil)
-        let shape = SKShapeNode(path: ref)
-        shape.fillColor = UIColor.whiteColor()
-        shape.alpha = 0.5
-        addChild(shape)
-        
         createButtons()
-
     }
     
     override init(texture: SKTexture!, color: UIColor, size: CGSize) {

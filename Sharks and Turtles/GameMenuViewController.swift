@@ -41,10 +41,12 @@ class GameMenuController: UIViewController {
         if segue.identifier == "onePlayerMainGame" {
             if let destinationVC = segue.destinationViewController as? MainGameController {
                 destinationVC.isSinglePlayer = true
+                destinationVC.gameMenuController = self
             }
         } else if segue.identifier == "twoPlayerMainGame" {
             if let destinationVC = segue.destinationViewController as? MainGameController {
                 destinationVC.isSinglePlayer = false
+                destinationVC.gameMenuController = self
             }
         }
         
