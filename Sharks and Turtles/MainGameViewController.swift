@@ -9,14 +9,18 @@
 import UIKit
 import SpriteKit
 
-class GameViewController: UIViewController {
+@available(iOS 9.0, *)
+class MainGameController: UIViewController {
     
-    private var scene:GameScene!
+    private var scene:MainGame!
+    var isSinglePlayer = true
+    weak var gameMenuController = UIViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        scene = GameScene(size: view.bounds.size)
+        scene = MainGame(size: view.bounds.size)
+        scene.isPlayer2Computer = isSinglePlayer
         // Configure the view.
         let skView = self.view as! SKView
         skView.showsFPS = true
@@ -27,8 +31,17 @@ class GameViewController: UIViewController {
             
         /* Set the scale mode to scale to fit the window */
         scene.scaleMode = .AspectFill
-            
+        
+        scene.viewController = self;
+        
         skView.presentScene(scene)
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        let skView = self.view as! SKView
+        
+        skView.presentScene(nil)
+        self.view = nil
     }
 
     override func shouldAutorotate() -> Bool {
@@ -50,5 +63,10 @@ class GameViewController: UIViewController {
 
     override func prefersStatusBarHidden() -> Bool {
         return true
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "endGame" {
+        }
     }
 }
