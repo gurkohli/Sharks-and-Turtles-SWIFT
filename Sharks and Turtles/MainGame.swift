@@ -11,38 +11,37 @@ import GameplayKit
 
 @available(iOS 9.0, *)
 class MainGame: SKScene {
-    weak var viewController = MainGameController()
     
     let events = EventManager()
     let GAME_OVER_EVENT = "gameOver"
     
     var bg: Background
     var fg: Foreground
-    var gameMasterNode: SKSpriteNode
     var pauseMenu: PauseMenu
     var gameOverMenu: GameOverMenu
-    var birdEyeCam: SKCameraNode!
-    var hudNode: SKSpriteNode
-    var curPlayerLabel: SKLabelNode
+    var dice: Dice
     
     var player1: Player
     var player2: Player
-    var isPlayer2Turn: Bool
-    var isPlayer2Computer = false
     var curPlayer = Player()
+    
+    var isPlayer2Turn = false
+    var isPlayer2Computer = false
     var isGamePaused = false
     var isGameOver = false
-    
-    var dice: Dice
+
+    var hudNode: SKSpriteNode
     var pauseButton: SKSpriteNode
-    var sharks: [Shark]
-    var turtles: [Turtle]
-    var tileArray: [Foreground.Tile]
-    var labelArray: [SKLabelNode]
+    var curPlayerLabel: SKLabelNode
     
-    var sharkHandlerNode: SKSpriteNode
-    var turtleHandlerNode: SKSpriteNode
-    var playerHandlerNode: SKSpriteNode
+    var sharks = [Shark]()
+    var turtles = [Turtle]()
+    var tileArray: [Foreground.Tile]
+    
+    var gameMasterNode = SKNode()
+    var sharkContainerNode = SKNode()
+    var turtleContainerNode = SKNode()
+    var playerContainerNode = SKNode()
     
     struct sharkTurtleData {
         var count: Int
@@ -53,59 +52,71 @@ class MainGame: SKScene {
     let TURTLE_DATA = sharkTurtleData(count: 7, beginTiles: [3,8,28,58,75,80,90], endTiles: [21,30,84,77,86,99,91])
     
     override init(size: CGSize) {
+        // Declaring size  and position constants
+        
         let frameSize = size
-        let hudSize = CGSizeMake(frameSize.width/2, frameSize.height/25)
-        let fgSize = CGSizeMake(frameSize.width/2, frameSize.height/2 - hudSize.height)
+        let hudSize = CGSizeMake(frameSize.width, frameSize.height/12)
+        let fgSize = CGSizeMake(frameSize.width, frameSize.height - hudSize.height)
         let tileSize = CGSizeMake(fgSize.width/10 - 2, fgSize.height/10 - 2);
         let playerSize = CGSizeMake(tileSize.width/2, tileSize.height/2)
-        let pauseMenuSize = CGSizeMake(fgSize.width/1.5, fgSize.height/2)
-        //TODO Add Dice Size when Adding Dice Textures
-        let diceSize = CGSizeMake(0, 0)
+        let popupMenuSize = CGSizeMake(fgSize.width/1.5, fgSize.height/2)
+        let diceSize = CGSizeMake(0, 0) //TODO Add Dice Size when Adding Dice Textures
         
+        let dicePosition = CGPointMake(fgSize.width - 25, fgSize.height-40)
         let player1Position = CGPointMake(playerSize.width, playerSize.height/2)
         let player2Position = CGPointMake(playerSize.width, playerSize.height*3/2)
-        let dicePosition = CGPointMake(fgSize.width - 25, fgSize.height-40)
-        
-        gameMasterNode = SKSpriteNode(color: UIColor.clearColor(), size: fgSize)
-        bg = Background(nodeSize: frameSize);
-        fg = Foreground(nodeSize: fgSize);
-        pauseMenu = PauseMenu(nodeSize: pauseMenuSize);
-        gameOverMenu = GameOverMenu(nodeSize: pauseMenuSize)
-        
-        birdEyeCam = SKCameraNode()
-        player1 = Player(nodeSize: playerSize, nodeColor: nil, nodePosition: player1Position);
-        player2 = Player(nodeSize: playerSize, nodeColor: UIColor.whiteColor(), nodePosition: player2Position);
-        isPlayer2Turn = false;
-        sharks = [Shark]();
-        turtles = [Turtle]();
-        dice = Dice(nodeSize: diceSize, nodePosition: dicePosition)
-        
-        hudNode = SKSpriteNode(color: UIColor.clearColor(), size: hudSize)
-        hudNode.position = CGPointMake(0, fgSize.height)
-        hudNode.anchorPoint = CGPointZero
-        //hudNode.alpha = 0.4
-        curPlayerLabel = SKLabelNode(fontNamed: "AmericanTypewriter")
-        curPlayerLabel.verticalAlignmentMode = .Bottom
-        curPlayerLabel.horizontalAlignmentMode = .Left
-        curPlayerLabel.position = CGPointMake(10, 2)
-        curPlayerLabel.fontSize = 20.0
-        curPlayerLabel.text = "Player 1"
-        
-        pauseButton = SKSpriteNode(color: UIColor.brownColor(), size: CGSizeMake(20, 20))
-        pauseButton.name = "pauseButton"
-        pauseButton.anchorPoint = CGPointMake(1, 0.5)
-        pauseButton.position = CGPointMake(hudNode.size.width - 5, hudNode.size.height/2)
-        pauseButton.zPosition = 50
-        tileArray = [Foreground.Tile(size: tileSize, position: CGPointMake(0,0))]
-        labelArray = [SKLabelNode]()
 
-        sharkHandlerNode = SKSpriteNode();
-        turtleHandlerNode = SKSpriteNode();
-        playerHandlerNode = SKSpriteNode()
-        
+        // Initializing global variables
+        isPlayer2Turn = false;
+
+        fg = Foreground(nodeSize: fgSize);
+        bg = Background(nodeSize: frameSize);
+        pauseMenu = PauseMenu(nodeSize: popupMenuSize);
+        gameOverMenu = GameOverMenu(nodeSize: popupMenuSize)
+        dice = Dice(nodeSize: diceSize, nodePosition: dicePosition)
+
+        player1 = Player(nodeSize: playerSize, nodeColor: nil, nodePosition: player1Position);
+        player1.name = "player1"
+        player2 = Player(nodeSize: playerSize, nodeColor: UIColor.whiteColor(), nodePosition: player2Position);
+        player2.name = "player2"
+
+        tileArray = [Foreground.Tile(size: tileSize, position: CGPointMake(0,0))]
+
+        hudNode = SKSpriteNode(color: UIColor.clearColor(), size: hudSize)
+        curPlayerLabel = SKLabelNode(fontNamed: "AmericanTypewriter")
+        pauseButton = SKSpriteNode(color: UIColor.brownColor(), size: CGSizeMake(50, 50))
+
+        // Init superclass
         super.init(size: size)
+
+        // Configure and add sprites
+        tileArray = fg.loadGrid()
+
+        pauseMenu.position = CGPointMake(size.width/2, size.height/2)
+        gameOverMenu.position = pauseMenu.position
+
+        initHUD()
+        initGameMasterNode()
+        initSharksAndTurtles()
+        setZPositions()
+
+        playerContainerNode.name = "playerContainerNode"
+        playerContainerNode.addChild(player1)
+        playerContainerNode.addChild(player2)
+
+        gameMasterNode.addChild(dice)
+        gameMasterNode.addChild(fg)
+        gameMasterNode.addChild(sharkContainerNode)
+        gameMasterNode.addChild(turtleContainerNode)
+        gameMasterNode.addChild(playerContainerNode)
+
+        self.name = "frame"
+        self.addChild(bg)
+        self.addChild(hudNode)
+        self.addChild(gameMasterNode)
+
+        events.listenTo(GAME_OVER_EVENT, action: self.gameOver)
         
-        events.listenTo(GAME_OVER_EVENT, action: self.endGame)
     }
 
     required init(coder aDecoder: NSCoder) {
@@ -115,116 +126,110 @@ class MainGame: SKScene {
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
 
-        tileArray = fg.loadGrid()
-        playerHandlerNode.addChild(player1)
-        playerHandlerNode.addChild(player2)
-        labelArray.append(SKLabelNode())
-        /*for var i=1; i < tileArray.count; i++ {
-            let label = SKLabelNode(fontNamed: "AmericanTypewriter")
-            //label.text = "\(i)"
-            label.position = CGPointMake(tileArray[i].position.x + tileArray[i].size.width - 4, tileArray[i].position.y)
-            label.zPosition = 3.0
-            label.fontSize = 5.0
-            label.alpha = 0.4
-            labelArray.append(label)
-        }*/
+    }
+    
+    func setZPositions() {
+        bg.zPosition = -10
+        
+        fg.zPosition = -5
+        
+        sharkContainerNode.zPosition = -2
+        turtleContainerNode.zPosition = -2
+        playerContainerNode.zPosition = -2
+        
+        dice.zPosition = -1
+        curPlayerLabel.zPosition = -1
+        
+        hudNode.zPosition = 0
+        gameMasterNode.zPosition = 0
+        
+        pauseButton.zPosition = 10
+        
+        pauseMenu.zPosition = 100
+        gameOverMenu.zPosition = 100
+    }
+    
+    func initGameMasterNode() {
+        gameMasterNode.name = "gameMasterNode"
+    }
+    
+    func initHUD() {
+        hudNode.name = "hudNode"
+        hudNode.position = CGPointMake(0, fg.size.height)
+        hudNode.anchorPoint = CGPointZero
+        //hudNode.alpha = 0.4
+        
+        curPlayerLabel.name = "curPlayerLabel"
+        curPlayerLabel.verticalAlignmentMode = .Center
+        curPlayerLabel.horizontalAlignmentMode = .Left
+        curPlayerLabel.position = CGPointMake(10, hudNode.size.height/2)
+        curPlayerLabel.fontSize = 30
+        curPlayerLabel.text = "Player 1"
+        
+        pauseButton.name = "pauseButton"
+        pauseButton.anchorPoint = CGPointMake(1, 0.5)
+        pauseButton.position = CGPointMake(hudNode.size.width - 5, hudNode.size.height/2)
+        
+        hudNode.addChild(pauseButton)
+        hudNode.addChild(curPlayerLabel)
+    }
+    
+    func initSharksAndTurtles() {
+        
+        sharkContainerNode.name = "sharkContainerNode"
+        turtleContainerNode.name = "turtleContainerNode"
+        
+        func addRasterizedPath(tile: Foreground.Tile, endTile: Foreground.Tile) -> SKEffectNode {
+
+            let path = CGPathCreateMutable()
+            let controlPoint1 = CGPointMake(tile.position.x + 20, tile.position.y + 20)
+            let controlPoint2 = CGPointMake(endTile.position.x - 10, endTile.position.y - 20)
+
+            CGPathMoveToPoint(path, nil, tile.position.x + tile.size.width/2, tile.position.y + tile.size.height/2)
+            CGPathAddCurveToPoint(path, nil, controlPoint1.x, controlPoint1.y, controlPoint2.x, controlPoint2.y, endTile.position.x + tile.size.width/2, endTile.position.y + tile.size.height/2)
+
+            let dashedPath = CGPathCreateCopyByDashingPath(path, nil, 0, [5.0,10.0], 2)
+            let shape = SKShapeNode(path: dashedPath!)
+            shape.strokeColor = UIColor.greenColor()
+
+            let shapeWrapper = SKEffectNode()
+            shapeWrapper.userInteractionEnabled = false
+            shapeWrapper.name = "sharkTurtleDashedLine"
+            shapeWrapper.addChild(shape)
+            shapeWrapper.zPosition = -2
+            shapeWrapper.shouldRasterize = true;
+            shapeWrapper.alpha = 0.4
+
+            return shapeWrapper
+        }
         
         for var i=0; i < SHARK_DATA.count; i++ {
             let tile = tileArray[SHARK_DATA.beginTiles[i]]
-            
+
             let sharkSize = CGSizeMake(tile.size.width/4, tile.size.height/4)
             let sharkPosition = CGPointMake(tile.position.x + sharkSize.width, tile.position.y + sharkSize.height)
-            
-            sharks.append(Shark(nodeSize: sharkSize, nodePosition: sharkPosition))
-            
-            let path = CGPathCreateMutable()
-            let endTile = tileArray[SHARK_DATA.endTiles[i]];
-            
-            let controlPoint1 = CGPointMake(tile.position.x + 5 , tile.position.y - 5)
-            let controlPoint2 = CGPointMake(endTile.position.x + 5, endTile.position.y + 5)
-            
-            CGPathMoveToPoint(path, nil, tile.position.x + tile.size.width/2, tile.position.y + tile.size.height/2)
-            //CGPathAddLineToPoint(path, nil,endTile.position.x + tile.size.width/2, endTile.position.y + tile.size.height/2)
-            CGPathAddCurveToPoint(path, nil, controlPoint1.x, controlPoint1.y, controlPoint2.x, controlPoint2.y, endTile.position.x + tile.size.width/2, endTile.position.y + tile.size.height/2)
-            let dashedPath = CGPathCreateCopyByDashingPath(path, nil, 0, [5.0,10.0], 2)
-            let shape = SKShapeNode(path: dashedPath!)
-            shape.strokeColor = UIColor.redColor()
-            //shape.alpha = 0.4
-            
-            let shapeWrapper = SKEffectNode()
-            shapeWrapper.addChild(shape)
-            shapeWrapper.zPosition = 3.0
-            shapeWrapper.shouldRasterize = true;
-            shapeWrapper.alpha = 0.4
-            
-            sharkHandlerNode.addChild(shapeWrapper)
-            sharkHandlerNode.addChild(sharks[i])
+
+            let shark = Shark(nodeSize: sharkSize, nodePosition: sharkPosition)
+            shark.name = "Shark \(i+1)"
+            sharks.append(shark)
+
+            sharkContainerNode.addChild(addRasterizedPath(tile, endTile: tileArray[SHARK_DATA.endTiles[i]]))
+            sharkContainerNode.addChild(sharks[i])
         }
-        
+
         for var i=0; i < TURTLE_DATA.count; i++ {
             let tile = tileArray[TURTLE_DATA.beginTiles[i]]
             
             let turtleSize = CGSizeMake(tile.size.width/4, tile.size.height/4)
             let turtlePosition = CGPointMake(tile.position.x + tile.size.width/2, tile.position.y + turtleSize.height)
             
-            turtles.append(Turtle(nodeSize: turtleSize, nodePosition:turtlePosition))
+            let turtle = Turtle(nodeSize: turtleSize, nodePosition:turtlePosition)
+            turtle.name = "Turtle \(i+1)"
+            turtles.append(turtle)
             
-            let path = CGPathCreateMutable()
-            let endTile = tileArray[TURTLE_DATA.endTiles[i]];
-            
-            let controlPoint1 = CGPointMake(tile.position.x + 20, tile.position.y + 20)
-            let controlPoint2 = CGPointMake(endTile.position.x - 10, endTile.position.y - 20)
-            
-            CGPathMoveToPoint(path, nil, tile.position.x + tile.size.width/2, tile.position.y + tile.size.height/2)
-            //CGPathAddLineToPoint(path, nil,endTile.position.x + tile.size.width/2, endTile.position.y + tile.size.height/2)
-            CGPathAddCurveToPoint(path, nil, controlPoint1.x, controlPoint1.y, controlPoint2.x, controlPoint2.y, endTile.position.x + tile.size.width/2, endTile.position.y + tile.size.height/2)
-            
-            let dashedPath = CGPathCreateCopyByDashingPath(path, nil, 0, [5.0,10.0], 2)
-            let shape = SKShapeNode(path: dashedPath!)
-            shape.strokeColor = UIColor.greenColor()
-            //shape.alpha = 0.4
-            let shapeWrapper = SKEffectNode()
-            shapeWrapper.addChild(shape)
-            shapeWrapper.zPosition = 3.0
-            shapeWrapper.shouldRasterize = true;
-            shapeWrapper.alpha = 0.4
-            
-            turtleHandlerNode.addChild(shapeWrapper)
-            turtleHandlerNode.addChild(turtles[i])
+            turtleContainerNode.addChild(addRasterizedPath(tile, endTile: tileArray[TURTLE_DATA.endTiles[i]]))
+            turtleContainerNode.addChild(turtles[i])
         }
-        //anchorPoint = CGPointMake(0.5,0.5)
-
-        
-        birdEyeCam.position = CGPointMake(size.width/2, size.height/2)
-
-        birdEyeCam.setScale(0.5)
-        birdEyeCam.name = "camera"
-
-        self.camera = birdEyeCam
-        
-        //fg.position = CGPointMake(size.width/4, size.height/4)
-        
-        pauseMenu.position = CGPointMake(size.width/2, size.height/2)
-        gameOverMenu.position = pauseMenu.position
-        
-        camera?.addChild(dice)
-        
-        hudNode.addChild(pauseButton)
-        hudNode.addChild(curPlayerLabel)
-        
-        gameMasterNode.name = "gameMasterNode"
-        gameMasterNode.position = CGPointMake(size.width/4, size.height/4)
-        gameMasterNode.anchorPoint = CGPointMake(0, 0)
-        
-        gameMasterNode.addChild(hudNode)
-        gameMasterNode.addChild(fg)
-        gameMasterNode.addChild(playerHandlerNode)
-        gameMasterNode.addChild(sharkHandlerNode)
-        gameMasterNode.addChild(turtleHandlerNode)
-        
-        addChild(birdEyeCam)
-        addChild(bg)
-        addChild(gameMasterNode)
     }
 
     func isSharkOnTile(currentTile: Int) -> Bool{
@@ -265,13 +270,13 @@ class MainGame: SKScene {
             func callback(){
                 let delayTime = Int64(50)
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, delayTime * Int64(NSEC_PER_MSEC)), dispatch_get_main_queue(), {
-                    self.userInteractionEnabled = true
+                    self.gameMasterNode.userInteractionEnabled = false // It says false but acts the opposite. Bug?
                     if (currentTile >= 100) {
                         self.events.trigger(self.GAME_OVER_EVENT)
                         return
                     }
                     if (computer != nil) {
-                        self.userInteractionEnabled = false
+                        self.gameMasterNode.userInteractionEnabled = true // It says false but acts the opposite. Bug?
                         self.performPlayerAction(computer!,computer: nil)
                     }
                     self.isPlayer2Turn = !self.isPlayer2Turn
@@ -291,41 +296,42 @@ class MainGame: SKScene {
     }
     
     func restartGame() {
+        events.removeListeners(nil)
+        
         let mainGame:MainGame = MainGame(size: self.view!.bounds.size)
         let transition = SKTransition.crossFadeWithDuration(0.5)
         mainGame.scaleMode = SKSceneScaleMode.Fill
         mainGame.isPlayer2Computer = self.isPlayer2Computer
-        mainGame.viewController = self.viewController
-        self.removeAllChildren()
-        self.removeAllActions()
-        self.scene?.removeFromParent()
-        self.view!.presentScene(mainGame, transition: transition)
+
+        scene?.removeFromParent()
+        view?.presentScene(mainGame, transition: transition)
     }
     
-    func endGame() {
-        self.userInteractionEnabled = true;
+    func gameOver() {
+        self.gameMasterNode.userInteractionEnabled = false; // It says false but acts the opposite. Bug?
         gameOverMenu.winningPlayerNode.text = (curPlayer == self.player1 ? "Player 1" : "Player 2") + " wins!";
         gameMasterNode.paused = true;
         gameMasterNode.alpha = 0.4
         gameOverMenu.setScale(0)
-        addChild(gameOverMenu)
+        self.addChild(gameOverMenu)
         let expand = SKAction.scaleTo(1.2, duration: 0.2)
         let bringBack = SKAction.scaleTo(1, duration: 0.1)
         gameOverMenu.runAction(SKAction.sequence([expand, bringBack]), completion: {self.isGameOver = true});
     }
     
     func pauseGame() {
+        self.gameMasterNode.userInteractionEnabled = false  // It says false but acts the opposite. Bug?
         gameMasterNode.paused = true;
         gameMasterNode.alpha = 0.4
         pauseMenu.setScale(0)
-        addChild(pauseMenu)
+        self.addChild(pauseMenu)
         let expand = SKAction.scaleTo(1.2, duration: 0.2)
         let bringBack = SKAction.scaleTo(1, duration: 0.1)
         pauseMenu.runAction(SKAction.sequence([expand, bringBack]), completion: {self.isGamePaused = true});
     }
     
     func pauseMenuHandler(touchedNode: SKNode, touchedPoint: CGPoint) {
-        if (CGRectContainsPoint(gameMasterNode.frame, touchedPoint) && !CGRectContainsPoint(pauseMenu.frame, touchedPoint) || touchedNode.name == pauseMenu.RESUME_BUTTON_NODE_NAME) {
+        if (CGRectContainsPoint(self.frame, touchedPoint) && !CGRectContainsPoint(pauseMenu.frame, touchedPoint) || touchedNode.name == pauseMenu.RESUME_BUTTON_NODE_NAME) {
             let expand = SKAction.scaleTo(1.2, duration: 0.1)
             let bringBack = SKAction.scaleTo(0, duration: 0.2)
             pauseMenu.runAction(SKAction.sequence([expand, bringBack]), completion: {
@@ -341,20 +347,23 @@ class MainGame: SKScene {
         }
             
         else if (touchedNode.name == pauseMenu.END_GAME_BUTTON_NODE_NAME) {
-            //self.viewController!.performSegueWithIdentifier("endGame", sender: nil)
-            if (self.viewController?.presentingViewController != nil) {
-                self.viewController?.dismissViewControllerAnimated(true, completion: nil)
-            }
+            endGame()
         }
+    }
+    
+    func endGame() {
+        events.removeListeners(nil)
+
+        let scene = MainMenu(size: self.view!.bounds.size)
+        let transition = SKTransition.moveInWithDirection(.Right, duration: 1)
+        self.view?.presentScene(scene, transition: transition)
     }
     
     func gameOverMenuHandler(touchedNode: SKNode) {
         if (touchedNode.name == gameOverMenu.PLAY_AGAIN_BUTTON_NODE) {
             restartGame()
         } else if (touchedNode.name == gameOverMenu.EXIT_GAME_BUTTON_NODE) {
-            if (self.viewController?.presentingViewController != nil) {
-                self.viewController?.dismissViewControllerAnimated(true, completion: nil)
-            }
+            endGame()
         }
     }
     
@@ -366,6 +375,7 @@ class MainGame: SKScene {
             let sceneTouchPoint = self.convertPointFromView(viewTouchLocation)
             let touchedNode = self.nodeAtPoint(sceneTouchPoint)
             print(touchedNode.name)
+            
             if (!isGamePaused && touchedNode.name == pauseButton.name) {
                 pauseGame()
                 
@@ -374,8 +384,9 @@ class MainGame: SKScene {
                 
             } else if (isGameOver) {
                 gameOverMenuHandler(touchedNode)
-            } else {
-                self.userInteractionEnabled = false;
+                
+            } else if (touchedNode.name == gameMasterNode.name) {
+                gameMasterNode.userInteractionEnabled = true;
                 if (isPlayer2Computer) {
                      performPlayerAction(player1, computer: player2)
                 } else {
@@ -394,7 +405,6 @@ class MainGame: SKScene {
     }
     
     deinit {
-        self.scene?.removeFromParent()
         self.removeAllChildren()
         self.removeAllActions()
     }

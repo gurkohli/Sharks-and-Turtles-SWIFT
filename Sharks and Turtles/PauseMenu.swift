@@ -31,14 +31,14 @@ class PauseMenu: PopupMenu {
     }
     
     func createButtons() {
-        let PADDING = CGFloat(10)
-        let INTER_BUTTON_PADDING = CGFloat(10)
+        let PADDING = CGFloat(15)
+        let INTER_BUTTON_PADDING = CGFloat(20)
         let noOfButtons = CGFloat(4)
         let availableWidth = size.width - 2*PADDING
         let availableHeight = size.height - 2*PADDING
         
         let buttonWidth = availableWidth
-        let buttonHeight = (availableHeight - noOfButtons*INTER_BUTTON_PADDING)/noOfButtons
+        let buttonHeight = (availableHeight - (noOfButtons-1)*INTER_BUTTON_PADDING)/noOfButtons
         let buttonSize = CGSizeMake(buttonWidth, buttonHeight)
         
         let resumeButtonNode = SKSpriteNode(color: UIColor.brownColor(), size: buttonSize)

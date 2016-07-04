@@ -16,7 +16,6 @@ class Background: SKSpriteNode {
         name = "background"
         size = nodeSize
         anchorPoint = CGPointMake(0.0,0.0)
-        zPosition = -10.0
         
         /*var backgroundTexture = [SKTexture]()
         

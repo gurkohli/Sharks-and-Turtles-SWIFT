@@ -10,7 +10,7 @@ import SpriteKit
 
 class Player: SKSpriteNode {
     
-    var PLAYER_SPEED = CGFloat(100);
+    var PLAYER_SPEED = CGFloat(200);
     var offsetFromTileBottom = CGFloat(0);
     
     init(nodeSize: CGSize, nodeColor: UIColor?, nodePosition: CGPoint) {
@@ -20,7 +20,6 @@ class Player: SKSpriteNode {
         size = nodeSize
         anchorPoint = CGPointMake(0.5,0.5)
         position = nodePosition
-        zPosition = 10.0
         userData = ["tilePosition": 1]
         offsetFromTileBottom = position.y
         zRotation = -1.5708 //90 Degrees
@@ -98,7 +97,7 @@ class Player: SKSpriteNode {
     func movePlayerToTile(destinationTile:Int, tileArray: [Foreground.Tile], runAfterActionCompletion: () -> Void) {
         let ref = createPathBetweenTiles(getCurrentTile(), destinationTile: destinationTile, tileArray: tileArray)
         let tileDifference = Double(abs(destinationTile - getCurrentTile()))
-        runAction(SKAction.sequence([SKAction.waitForDuration(0.5),SKAction.followPath(ref, asOffset: false, orientToPath: true, speed: PLAYER_SPEED + 100 + CGFloat(1.2 * tileDifference))]), completion: runAfterActionCompletion)
+        runAction(SKAction.sequence([SKAction.waitForDuration(0.5),SKAction.followPath(ref, asOffset: false, orientToPath: true, speed: PLAYER_SPEED + 200 + CGFloat(1.5 * tileDifference))]), completion: runAfterActionCompletion)
         setCurrentTile(destinationTile)
     }
 

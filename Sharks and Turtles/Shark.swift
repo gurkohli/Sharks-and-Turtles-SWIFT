@@ -22,7 +22,6 @@ class Shark: SKSpriteNode {
         size = nodeSize
         anchorPoint = CGPointMake(0.5,0.5)
         position = nodePosition
-        zPosition = 3.0
         
         color = UIColor.redColor()
         

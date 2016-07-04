@@ -16,7 +16,6 @@ class PopupMenu: SKSpriteNode {
         name = "popupMenu"
         size = nodeSize
         anchorPoint = CGPointMake(0.5, 0.5)
-        zPosition = 100.0
         color = UIColor.clearColor()
         
         let ref = CGPathCreateWithRoundedRect(CGRectMake(-nodeSize.width/2, -nodeSize.height/2, nodeSize.width, nodeSize.height), 5, 5, nil)

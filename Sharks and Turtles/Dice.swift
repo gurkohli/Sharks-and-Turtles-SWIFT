@@ -22,11 +22,12 @@ class Dice: SKSpriteNode {
         super.init(texture: nil, color: UIColor.clearColor(), size: nodeSize)
         
         //TODO Remove all this
+        dicePlaceholder.name = "dicePlaceholder"
         dicePlaceholder.text = "0"
         dicePlaceholder.position = nodePosition
         dicePlaceholder.color = UIColor.blackColor()
-        dicePlaceholder.zPosition = 50
         
+        self.name = "dice"
         self.addChild(dicePlaceholder)
     }
     

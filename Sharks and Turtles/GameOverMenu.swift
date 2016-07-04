@@ -32,21 +32,21 @@ class GameOverMenu: PopupMenu {
     }
     
     func createButtons() {
-        let PADDING = CGFloat(10)
-        let INTER_BUTTON_PADDING = CGFloat(15)
+        let PADDING = CGFloat(20)
+        let INTER_BUTTON_PADDING = CGFloat(30)
         let noOfButtons = CGFloat(3)
         let availableWidth = size.width - 2*PADDING
         let availableHeight = size.height - 2*PADDING
         
         let buttonWidth = availableWidth
-        let buttonHeight = (availableHeight - noOfButtons*INTER_BUTTON_PADDING)/noOfButtons
+        let buttonHeight = (availableHeight - (noOfButtons-1)*INTER_BUTTON_PADDING)/noOfButtons
         let buttonSize = CGSizeMake(buttonWidth, buttonHeight)
         
         winningPlayerNode.name = WINNING_PLAYER_NODE
-        winningPlayerNode.position = CGPointMake(0, buttonHeight/2 + INTER_BUTTON_PADDING)
-        winningPlayerNode.verticalAlignmentMode = .Bottom
+        winningPlayerNode.position = CGPointMake(0, buttonHeight + INTER_BUTTON_PADDING)
+        winningPlayerNode.verticalAlignmentMode = .Center
         winningPlayerNode.horizontalAlignmentMode = .Center
-        winningPlayerNode.fontSize = 18.0
+        winningPlayerNode.fontSize = 35
         //winningPlayerNode.anchorPoint = CGPointMake(0.5,0)
         
         let playAgainButtonNode = SKSpriteNode(color: UIColor.brownColor(), size: buttonSize)
