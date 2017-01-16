@@ -4,7 +4,7 @@ Sharks and Turtles is an iOS game based on the classic board game Snakes and Lad
 
 With the roll of a dice, players compete against other players in hopes of being the first person to reach the top of the board. Along the way, players must watch out for Sharks, as they will chase you down the board. Turtles are a player's friend, just hop on them and boost your way higher up the board.
 
-# This game is late-alpha, All the core features have been developed. However, the graphics have only been partially developed.
+## This game is late-alpha, All the core features have been developed. However, the graphics have only been partially developed.
 
 # Disclaimer:
 Copyright ©20XX. Gur Kohli. All Rights Reserved.
